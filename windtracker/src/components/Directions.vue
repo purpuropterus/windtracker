@@ -1,34 +1,36 @@
 <template>
     <div class="directions">
-        <button class="directions-item" v-for="direction in directions" :key="direction.id">
-            <img :src="direction.img" :alt="direction.id" />
+        <button @click="windStore.addUsedWind($event, 'direction', direction)" class="directions-item" v-for="direction in directions" :key="direction.id">
+            <img class="direction-img" draggable="false" :src="direction.img" :alt="direction.id" />
         </button>
     </div>
 </template>
 
-<script>
-export default {
-    name: 'Directions',
-    props: ["directions"],
-    setup(){
+<script setup>
 
-    }
-}
+import { defineProps } from 'vue'
+
+import { useWindStore } from '@/stores/windStore';
+
+const props = defineProps({
+    directions: Array
+})
+
+const windStore = useWindStore();
+
 </script>
 
 <style>
 
-/* make the buttons smaller */
-
 .directions {
-    display: flex;
-    flex-direction: row;
+    display: inline-block;
+    text-align: left;
     width: 100%;
 }
 
 .directions-item {
-    flex: 1;
     margin: 1%;
+    width: 10.5%
 }
 
 .directions-item img {

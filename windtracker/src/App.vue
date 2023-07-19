@@ -1,8 +1,8 @@
 <template>
   <div class="parent">
     <div class="left">
-      <Directions :directions="wind.directions"/>
-      <Speeds :speeds="wind.speeds"/>
+      <Directions :directions="windStore.wind.directions"/>
+      <Speeds :speeds="windStore.wind.speeds"/>
     </div>
     <div class="right">
       <Settings />
@@ -10,55 +10,15 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
-import Directions from './components/Directions.vue'
-import Speeds from './components/Speeds.vue'
-import Settings from './components/Settings.vue'
+import Directions from '@/components/Directions.vue'
+import Speeds from '@/components/Speeds.vue'
+import Settings from '@/components/Settings.vue'
 
-import { ref } from 'vue'
+import { useWindStore } from '@/stores/windStore';
+const windStore = useWindStore();
 
-export default {
-  name: 'App',
-  components: {
-    Directions,
-    Speeds,
-    Settings
-  },
-  setup() {
-
-    const wind = ref({
-      directions: [
-        { id: "nw", img: require("@/assets/nw.jpg")},
-        { id: "n", img: require("@/assets/n.jpg")},
-        { id: "ne", img: require("@/assets/ne.jpg")},
-        { id: "e", img: require("@/assets/e.jpg")},
-        { id: "se", img: require("@/assets/se.jpg")},
-        { id: "s", img: require("@/assets/s.jpg")},
-        { id: "sw", img: require("@/assets/sw.jpg")},
-        { id: "w", img: require("@/assets/w.jpg")},
-      ],
-      speeds: [
-        { m_s: 0, mph: 0 },
-        { m_s: 1, mph: 2 },
-        { m_s: 2, mph: 4 },
-        { m_s: 3, mph: 6 },
-        { m_s: 4, mph: 8 },
-        { m_s: 5, mph: 10 },
-        { m_s: 6, mph: 12 },
-        { m_s: 7, mph: 14 },
-        { m_s: 8, mph: 16 },
-        { m_s: 9, mph: 18 },
-        { m_s: 10, mph: 20 },
-      ]
-    })
-
-    return {
-      wind
-    }
-
-  }
-}
 </script>
 
 <style>
@@ -79,10 +39,12 @@ export default {
 
 .left {
   width: 100%;
+  flex: 1;
 }
 
-.right: {
+.right {
   width: 100%;
+  flex: 0.3;
 }
 
 

@@ -46,11 +46,10 @@ export const useWindStore = defineStore("wind", {
 
                     if (this.usedDirections.length == 7) {
 
+                        //todo: change this to use vue refs (put a ref on the parent)
                         document.querySelectorAll(".directions-item").forEach((el) => {
                             el.style.display = "inline-block"                            
                         })
-
-                        // document.querySelector(".directions").style.display = "inline-block"
 
                         this.usedDirections = []
 
@@ -74,11 +73,10 @@ export const useWindStore = defineStore("wind", {
                     
                 if (this.usedSpeeds.length == 8) {
 
+                    //todo: change this to use vue refs (put a ref on the parent)
                     document.querySelectorAll(".speeds-item").forEach((el) => {
                         el.style.display = "inline-block"                            
                     })
-
-                    // document.querySelector(".directions").style.display = "inline-block"
 
                     this.usedSpeeds = []
 

@@ -39,11 +39,12 @@ export const useWindStore = defineStore("wind", {
         }
     },
     actions: {
-        addUsedWind (ev, type, value) {
+        handleClick (ev, type, value) {
 
             let target = null
             let maxLength = null
             let pushTo = null
+            let historyIndex = null
 
             //todo: change this to use vue refs (put a ref on the parent)
             let className = null
@@ -60,6 +61,7 @@ export const useWindStore = defineStore("wind", {
                     maxLength = 7
                     pushTo = this.usedDirections
                     className = ".directions-item"
+                    historyIndex = 0
 
                     break
 
@@ -70,9 +72,10 @@ export const useWindStore = defineStore("wind", {
                     maxLength = 8
                     pushTo = this.usedSpeeds
                     className = ".speeds-item"
+                    historyIndex = 1
 
                     break
-                    
+
             }
 
 
@@ -94,6 +97,20 @@ export const useWindStore = defineStore("wind", {
 
                 pushTo.push(value)
 
+            }
+
+
+
+            // ### History ### //
+
+
+            this.currentPair[historyIndex] = value
+
+            console.log(this.currentPair)
+
+            if (this.currentPair[0].id && this.currentPair[1].m_s) {
+                this.history.push(this.currentPair)
+                this.currentPair = [ {}, {} ]
             }
 
 

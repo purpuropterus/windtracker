@@ -5,7 +5,7 @@
         <p> {{ windStore.currentPair }}</p>
 
         <div class="history-item" v-for="item in windStore.history" :key="item.id">
-            <p> {{item[1]["m_s"]}}{{ item[0]["id"] }}</p>
+            <p> {{item[1][settingsStore.speedUnit]}}{{ item[0]["id"] }}</p>
         </div>
 
     </div>
@@ -15,8 +15,10 @@
 <script setup>
 
 import { useWindStore } from '@/stores/windStore';
+import { useSettingsStore } from '@/stores/settingsStore';
 
 const windStore = useWindStore();
+const settingsStore = useSettingsStore();
 
 </script>
 

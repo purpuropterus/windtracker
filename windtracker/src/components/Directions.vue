@@ -1,6 +1,6 @@
 <template>
     <div class="directions" ref="directionsRef">
-        <button @click="windStore.addUsedWind($event, 'direction', direction)" class="directions-item" v-for="direction in directions" :key="direction.id">
+        <button @click="windStore.handleClick($event, 'direction', direction)" class="directions-item" v-for="direction in directions" :key="direction.id">
             <img class="direction-img" draggable="false" :src="direction.img" :alt="direction.id" />
         </button>
     </div>

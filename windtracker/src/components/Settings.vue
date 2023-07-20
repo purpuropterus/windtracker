@@ -7,7 +7,6 @@
                 <option value="mph" selected>mph</option>
                 <option value="m_s">m/s</option>
             </select>
-            <p> {{ speedUnit }}</p>
         </div>
 
     </div>

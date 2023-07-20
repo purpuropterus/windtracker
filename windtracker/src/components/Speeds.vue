@@ -1,6 +1,6 @@
 <template>
     <div class="speeds" ref="speedsRef">
-        <button @click="windStore.addUsedWind($event, 'speed', speed)" class="speeds-item" v-for="speed in speeds" :key="speed.m_s">
+        <button @click="windStore.handleClick($event, 'speed', speed)" class="speeds-item" v-for="speed in speeds" :key="speed.m_s">
             {{ speed[settingsStore.speedUnit] }}
         </button>
     </div>

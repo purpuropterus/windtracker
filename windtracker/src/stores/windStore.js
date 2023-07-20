@@ -40,78 +40,111 @@ export const useWindStore = defineStore("wind", {
     },
     actions: {
         handleClick (ev, type, value) {
-
             let target = null
-            let maxLength = null
-            let pushTo = null
             let historyIndex = null
-
-            //todo: change this to use vue refs (put a ref on the parent)
-            let className = null
-
+            
             switch (type) {
                 case "direction":
-
+            
                     if (ev.target.className == "direction-img") {
                         target = ev.target.parentNode
                     } else {
                         target = ev.target
                     }
-
-                    maxLength = 7
-                    pushTo = this.usedDirections
-                    className = ".directions-item"
+            
                     historyIndex = 0
-
+                    
                     break
-
+            
                 case "speed":
-
+            
                     target = ev.target
-
-                    maxLength = 8
-                    pushTo = this.usedSpeeds
-                    className = ".speeds-item"
+            
                     historyIndex = 1
-
+            
                     break
+            
+                }
+            
+            // ### History ### //
+            
+            this.currentPair[historyIndex] = value
+            
+        }
+    },
+})
+            // let target = null
+            // let maxLength = null
+            // let pushTo = null
+            // let historyIndex = null
 
-            }
+            // //todo: change this to use vue refs (put a ref on the parent)
+            // let className = null
+
+            // switch (type) {
+            //     case "direction":
+
+            //         if (ev.target.className == "direction-img") {
+            //             target = ev.target.parentNode
+            //         } else {
+            //             target = ev.target
+            //         }
+
+            //         maxLength = 7
+            //         pushTo = this.usedDirections
+            //         className = ".directions-item"
+            //         historyIndex = 0
+
+            //         break
+
+            //     case "speed":
+
+            //         target = ev.target
+
+            //         maxLength = 8
+            //         pushTo = this.usedSpeeds
+            //         className = ".speeds-item"
+            //         historyIndex = 1
+
+            //         break
+
+            // }
 
 
 
-            if (pushTo.length == maxLength) {
+            // if (pushTo.length == maxLength) {
 
-                //todo: change this to use vue refs (put a ref on the parent)
-                document.querySelectorAll(className).forEach((el) => {
-                    el.style.display = "inline-block"                            
-                })
+            //     //todo: change this to use vue refs (put a ref on the parent)
+            //     document.querySelectorAll(className).forEach((el) => {
+            //         el.style.display = "inline-block"                            
+            //     })
 
-                // clear the array
-                pushTo.splice(0)
+            //     // clear the array
+            //     pushTo.splice(0)
                 
 
-            } else {
+            // } else {
 
-                target.style.display = "none"
+            //     // target.style.display = "none"
+            //     target.classList.add("highlighted")
 
-                pushTo.push(value)
+            //     // pushTo.push(value)
 
-            }
-
-
-
-            // ### History ### //
+            // }
 
 
-            this.currentPair[historyIndex] = value
 
-            console.log(this.currentPair)
+            // // ### History ### //
 
-            if ("id" in this.currentPair[0] && "m_s" in this.currentPair[1]) {
-                this.history.push(this.currentPair)
-                this.currentPair = [ {}, {} ]
-            }
+
+            // this.currentPair[historyIndex] = value
+
+            // console.log(this.currentPair)
+
+            // if ("id" in this.currentPair[0] && "m_s" in this.currentPair[1]) {
+            //     this.history.push(this.currentPair)
+            //     this.currentPair = [ {}, {} ]
+            // }
 
 
             // switch (type) {
@@ -161,8 +194,4 @@ export const useWindStore = defineStore("wind", {
 
             //             this.usedSpeeds.push(value)
             //             console.log(this.usedSpeeds)
-            // }
-        }
-    }
-
-})
+            

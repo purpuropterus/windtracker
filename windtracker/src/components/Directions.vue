@@ -1,5 +1,5 @@
 <template>
-    <div class="directions">
+    <div class="directions" ref="directionsRef">
         <button @click="windStore.addUsedWind($event, 'direction', direction)" class="directions-item" v-for="direction in directions" :key="direction.id">
             <img class="direction-img" draggable="false" :src="direction.img" :alt="direction.id" />
         </button>
@@ -8,7 +8,6 @@
 
 <script setup>
 
-import { defineProps } from 'vue'
 
 import { useWindStore } from '@/stores/windStore';
 

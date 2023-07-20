@@ -33,28 +33,23 @@ export const useWindStore = defineStore("wind", {
             usedDirections: [],
             usedSpeeds: [],
 
+            currentPair: [ {}, {} ],
+            history: [ [ { id: "s", img: require("@/assets/s.jpg")}, { m_s: 1, mph: 2 } ] ],
+
         }
     },
     actions: {
         addUsedWind (ev, type, value) {
 
             let target = null
+            let maxLength = null
+            let pushTo = null
+
+            //todo: change this to use vue refs (put a ref on the parent)
+            let className = null
 
             switch (type) {
-                
                 case "direction":
-
-                    if (this.usedDirections.length == 7) {
-
-                        //todo: change this to use vue refs (put a ref on the parent)
-                        document.querySelectorAll(".directions-item").forEach((el) => {
-                            el.style.display = "inline-block"                            
-                        })
-
-                        this.usedDirections = []
-
-                        break
-                    }
 
                     if (ev.target.className == "direction-img") {
                         target = ev.target.parentNode
@@ -62,32 +57,94 @@ export const useWindStore = defineStore("wind", {
                         target = ev.target
                     }
 
-                    target.style.display = "none"
-
-                    this.usedDirections.push(value)
-                    console.log(this.usedDirections)
+                    maxLength = 7
+                    pushTo = this.usedDirections
+                    className = ".directions-item"
 
                     break
 
                 case "speed":
-                    
-                if (this.usedSpeeds.length == 8) {
 
-                    //todo: change this to use vue refs (put a ref on the parent)
-                    document.querySelectorAll(".speeds-item").forEach((el) => {
-                        el.style.display = "inline-block"                            
-                    })
+                    target = ev.target
 
-                    this.usedSpeeds = []
+                    maxLength = 8
+                    pushTo = this.usedSpeeds
+                    className = ".speeds-item"
 
                     break
-                }
-
-                    ev.target.style.display = "none"
-
-                    this.usedSpeeds.push(value)
-                    console.log(this.usedSpeeds)
+                    
             }
+
+
+
+            if (pushTo.length == maxLength) {
+
+                //todo: change this to use vue refs (put a ref on the parent)
+                document.querySelectorAll(className).forEach((el) => {
+                    el.style.display = "inline-block"                            
+                })
+
+                // clear the array
+                pushTo.splice(0)
+                
+
+            } else {
+
+                target.style.display = "none"
+
+                pushTo.push(value)
+
+            }
+
+
+            // switch (type) {
+                
+            //     case "direction":
+
+            //         if (this.usedDirections.length == 7) {
+
+            //             //todo: change this to use vue refs (put a ref on the parent)
+            //             document.querySelectorAll(".directions-item").forEach((el) => {
+            //                 el.style.display = "inline-block"                            
+            //             })
+
+            //             this.usedDirections = []
+
+            //             break
+            //         }
+
+            //         if (ev.target.className == "direction-img") {
+            //             target = ev.target.parentNode
+            //         } else {
+            //             target = ev.target
+            //         }
+
+            //         target.style.display = "none"
+
+            //         this.usedDirections.push(value)
+            //         console.log(this.usedDirections)
+
+            //         break
+
+            //     case "speed":
+                    
+            //         if (this.usedSpeeds.length == 8) {
+
+            //             //todo: change this to use vue refs (put a ref on the parent)
+            //             document.querySelectorAll(".speeds-item").forEach((el) => {
+            //                 el.style.display = "inline-block"                            
+            //             })
+
+            //             this.usedSpeeds = []
+
+            //             break
+            //         }
+
+            //             ev.target.style.display = "none"
+
+            //             this.usedSpeeds.push(value)
+            //             console.log(this.usedSpeeds)
+            // }
         }
     }
 

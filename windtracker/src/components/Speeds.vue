@@ -1,5 +1,5 @@
 <template>
-    <div class="speeds">
+    <div class="speeds" ref="speedsRef">
         <button @click="windStore.addUsedWind($event, 'speed', speed)" class="speeds-item" v-for="speed in speeds" :key="speed.m_s">
             {{ speed[settingsStore.speedUnit] }}
         </button>
@@ -7,8 +7,6 @@
 </template>
 
 <script setup>
-
-import { defineProps } from 'vue'
 
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useWindStore } from '@/stores/windStore';

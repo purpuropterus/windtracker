@@ -3,6 +3,7 @@
     <div class="left">
       <Directions :directions="windStore.wind.directions"/>
       <Speeds :speeds="windStore.wind.speeds"/>
+      <History />
     </div>
     <div class="right">
       <Settings />
@@ -15,6 +16,7 @@
 import Directions from '@/components/Directions.vue'
 import Speeds from '@/components/Speeds.vue'
 import Settings from '@/components/Settings.vue'
+import History from '@/components/History.vue'
 
 import { useWindStore } from '@/stores/windStore';
 const windStore = useWindStore();

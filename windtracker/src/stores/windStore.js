@@ -40,17 +40,17 @@ export const useWindStore = defineStore("wind", {
     },
     actions: {
         handleClick (ev, type, value) {
-            let target = null
+            // let target = null
             let historyIndex = null
             
             switch (type) {
                 case "direction":
             
-                    if (ev.target.className == "direction-img") {
-                        target = ev.target.parentNode
-                    } else {
-                        target = ev.target
-                    }
+                    // if (ev.target.className == "direction-img") {
+                    //     target = ev.target.parentNode
+                    // } else {
+                    //     target = ev.target
+                    // }
             
                     historyIndex = 0
                     
@@ -58,7 +58,7 @@ export const useWindStore = defineStore("wind", {
             
                 case "speed":
             
-                    target = ev.target
+                    // target = ev.target
             
                     historyIndex = 1
             
@@ -69,7 +69,38 @@ export const useWindStore = defineStore("wind", {
             // ### History ### //
             
             this.currentPair[historyIndex] = value
+
+
+            //if the current pair is full
+            if (this.currentPair[0]?.id && this.currentPair[1]?.m_s !== undefined) {
+
+                //push it to history
+                this.history.push(this.currentPair)
+
+                //push direction to used directions
+                this.usedDirections.push(this.currentPair[0]);
+                this.usedSpeeds.push(this.currentPair[1]);
+
+
+                //clear it
+                this.currentPair = [ {}, {} ]
+
+                if (this.usedDirections.length == 8) {
+                    this.usedDirections = []
+                }
+
+                if (this.usedSpeeds.length == 9) {
+                    this.usedSpeeds = []
+                }
+
+            }
             
+        },
+        reset () {
+            this.usedDirections = []
+            this.usedSpeeds = []
+            this.currentPair = [ {}, {} ]
+            this.history = []
         }
     },
 })

@@ -3,7 +3,8 @@ import { defineStore } from "pinia"
 export const useSettingsStore = defineStore("settings", {
     state: () => {
         return {
-            speedUnit: "mph"
+            speedUnit: "mph",
+            resetHotkey: null,
         }
     }
 })

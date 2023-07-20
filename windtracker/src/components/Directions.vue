@@ -1,20 +1,24 @@
 <template>
     <div class="directions" ref="directionsRef">
-        <button 
-            @click="handleClick($event, 'direction', direction)" 
-            class="directions-item" 
-            :class="{ highlighted: direction.id == windStore.currentPair[0].id }"
-            v-for="direction in directions" 
-            :key="direction.id"
-        >
-            <img class="direction-img" draggable="false" :src="direction.img" :alt="direction.id" />
-        </button>
+      <button
+        v-for="direction in filteredDirections"
+        :key="direction.id"
+        @click="windStore.handleClick($event, 'direction', direction)"
+        class="directions-item"
+        :class="{ highlighted: direction.id == windStore.currentPair[0].id }"
+      >
+        <img class="direction-img" draggable="false" :src="direction.img" :alt="direction.id" />
+      </button>
     </div>
-</template>
-
+  </template>
+  
+  
+  
+  
 <script setup>
 
 import { useWindStore } from '@/stores/windStore'
+import { computed } from 'vue'
 
 const props = defineProps({
     directions: Array
@@ -22,42 +26,9 @@ const props = defineProps({
 
 const windStore = useWindStore()
 
-
-
-
-const handleClick = (ev, type, value) => {
-
-let target = null
-let historyIndex = null
-
-switch (type) {
-    case "direction":
-
-        if (ev.target.className == "direction-img") {
-            target = ev.target.parentNode
-        } else {
-            target = ev.target
-        }
-
-        historyIndex = 0
-        
-        break
-
-    case "speed":
-
-        target = ev.target
-
-        historyIndex = 1
-
-        break
-
-    }
-
-// ### History ### //
-
-windStore.currentPair[historyIndex] = value
-
-}
+const filteredDirections = computed(() => {
+  return props.directions.filter((direction) => !windStore.usedDirections.includes(direction));
+});
 
 </script>
 

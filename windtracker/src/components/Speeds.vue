@@ -1,10 +1,10 @@
 <template>
     <div class="speeds" ref="speedsRef">
         <button 
+            v-for="speed in filteredSpeeds" 
             @click="windStore.handleClick($event, 'speed', speed)" 
             class="speeds-item"
             :class="{ highlighted: speed.m_s == windStore.currentPair[1].m_s }" 
-            v-for="speed in speeds" 
             :key="speed.m_s"
         >
             {{ speed[settingsStore.speedUnit] }}
@@ -14,15 +14,21 @@
 
 <script setup>
 
-import { useSettingsStore } from '@/stores/settingsStore';
-import { useWindStore } from '@/stores/windStore';
+import { computed } from 'vue'
+
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useWindStore } from '@/stores/windStore'
 
 const props = defineProps({
     speeds: Array
 })
 
-const settingsStore = useSettingsStore();
+const settingsStore = useSettingsStore()
 const windStore = useWindStore();
+
+const filteredSpeeds = computed(() => {
+    return props.speeds.filter((speed) => !windStore.usedSpeeds.includes(speed));
+});
 
 
 </script>
@@ -37,7 +43,7 @@ const windStore = useWindStore();
 
 .speeds-item {
     margin: 1%;
-    height: 60px;
+    height: 50px;
     width: 7.0915%;
     font-weight: bold;
     font-size: 2vw;

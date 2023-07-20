@@ -34,7 +34,7 @@ export const useWindStore = defineStore("wind", {
             usedSpeeds: [],
 
             currentPair: [ {}, {} ],
-            history: [ [ { id: "s", img: require("@/assets/s.jpg")}, { m_s: 1, mph: 2 } ] ],
+            history: [ ],
 
         }
     },
@@ -108,7 +108,7 @@ export const useWindStore = defineStore("wind", {
 
             console.log(this.currentPair)
 
-            if (this.currentPair[0].id && this.currentPair[1].m_s) {
+            if ("id" in this.currentPair[0] && "m_s" in this.currentPair[1]) {
                 this.history.push(this.currentPair)
                 this.currentPair = [ {}, {} ]
             }

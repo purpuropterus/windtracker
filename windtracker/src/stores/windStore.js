@@ -28,7 +28,7 @@ export const useWindStore = defineStore("wind", {
                     { m_s: 8, mph: 16, color: "#a648b9" },
                     { m_s: 9, mph: 18, color: "#c53c9d" },
                     { m_s: 10, mph: 20, color: "#c43584" },
-                    
+
                 ]
             },
 
@@ -58,31 +58,32 @@ export const useWindStore = defineStore("wind", {
             
             }
 
-
-            //if the current pair is full
             if (this.currentPair[0]?.id && this.currentPair[1]?.m_s !== undefined) {
 
-                //push it to history
-                this.history.push(this.currentPair)
-
-                //push direction to used directions
-                this.usedDirections.push(this.currentPair[0]);
-                this.usedSpeeds.push(this.currentPair[1]);
-
-
-                //clear it
-                this.currentPair = [ {}, {} ]
-
-                if (this.usedDirections.length == 8) {
-                    this.usedDirections = []
-                }
-
-                if (this.usedSpeeds.length == 9) {
-                    this.usedSpeeds = []
-                }
+                this.addToHistory(this.currentPair)
 
             }
             
+        },
+        addToHistory (arr) {
+            //push it to history
+            this.history.push(arr)
+
+            //push direction to used directions
+            this.usedDirections.push(arr[0]);
+            this.usedSpeeds.push(arr[1]);
+
+
+            //clear it
+            this.currentPair = [ {}, {} ]
+
+            if (this.usedDirections.length == 8) {
+                this.usedDirections = []
+            }
+
+            if (this.usedSpeeds.length == 9) {
+                this.usedSpeeds = []
+            }
         },
         reset () {
             this.usedDirections = []

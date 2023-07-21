@@ -1,4 +1,7 @@
 <template>
+
+  <!-- todo: click last element to undo -->
+
   <div class="history">
     <div class="history-item" v-for="(item, index) in windStore.history" :key="item.id">
       <div class="history-item-image">
@@ -25,6 +28,7 @@ const settingsStore = useSettingsStore();
   width: 100%;
   text-align: left;
   margin-left: 5px;
+  height: 5vw
 }
 
 .history-item {
@@ -33,7 +37,6 @@ const settingsStore = useSettingsStore();
   position: relative;
   vertical-align: top;
   width: 4.956%;
-  height: 5%;
   margin: 0.3%;
 }
 
@@ -63,14 +66,12 @@ const settingsStore = useSettingsStore();
 
 .history-item-index {
   margin: 0;
-  font-weight: bold;
   font-size: 0.9vw;
 }
 
 .history-item-id {
   margin: 0;
   font-size: 1vw;
-  font-weight: bold;
   position: absolute;
   top: 50%; /* Center the text vertically */
   left: 50%; /* Center the text horizontally */

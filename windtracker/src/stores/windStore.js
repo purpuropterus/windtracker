@@ -9,7 +9,7 @@ export const useWindStore = defineStore("wind", {
                     { id: "NW", img: require("@/assets/nw.png")},
                     { id: "N", img: require("@/assets/n.png")},
                     { id: "NE", img: require("@/assets/ne.png")},
-                    { id: "E", img: require("@/assets/w.png")},
+                    { id: "E", img: require("@/assets/e.png")},
                     { id: "SE", img: require("@/assets/se.png")},
                     { id: "S", img: require("@/assets/s.png")},
                     { id: "SW", img: require("@/assets/sw.png")},
@@ -66,6 +66,11 @@ export const useWindStore = defineStore("wind", {
             
         },
         addToHistory (arr) {
+
+            if (arr == null || arr == undefined) {
+                return
+            }
+
             //push it to history
             this.history.push(arr)
 
@@ -90,6 +95,8 @@ export const useWindStore = defineStore("wind", {
             this.usedSpeeds = []
             this.currentPair = [ {}, {} ]
             this.history = []
+
+            // todo: clear windString in TextMode.vue
         }
     },
 })

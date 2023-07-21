@@ -2,6 +2,7 @@
     <div class="text-mode">
         <h3>Text Mode</h3>
         <input v-model="windString" @keypress.enter="handleKey" type="text">
+        <p class="error" v-if="error"> {{ error }}</p>
     </div>
 </template>
 
@@ -15,18 +16,19 @@ const settingsStore = useSettingsStore();
 const windStore = useWindStore();
 
 let windString = ref("")
+let error = ref("")
 
 const handleKey = (ev) => {
     ev.preventDefault()
     
-    console.log(JSON.stringify(parseWindString(windString.value)))
-
     windStore.addToHistory(parseWindString(windString.value))
 
     windString.value = ""
 }
 
 const parseWindString = (str) => {
+
+    //todo: make capability for putting "?" as a direction (when you miss the direction on 0 wind)
 
     const speedUnit = settingsStore.speedUnit;
 
@@ -41,6 +43,28 @@ const parseWindString = (str) => {
     speedUnit === 'mph'
         ? windStore.wind.speeds.find((spd) => spd.mph === speedValue)
         : windStore.wind.speeds.find((spd) => spd.m_s === speedValue);
+
+    if (!directionObject) {
+        error.value = "Invalid direction"
+        return null
+    }
+
+    if (!speedObject) {
+        error.value = "Invalid speed"
+        return null
+    }
+
+    if (windStore.usedDirections.includes(directionObject)) {
+        error.value = "Direction already used"
+        return null
+    }
+
+    if (windStore.usedSpeeds.includes(speedObject)) {
+        error.value = "Speed already used"
+        return null
+    }
+
+    error.value = ""
 
     return [ directionObject, speedObject ];
 
@@ -59,4 +83,9 @@ const parseWindString = (str) => {
         display:inline-block;
         margin: 1%;
     }
+
+    .error {
+        color: red;
+    }
+
 </style>

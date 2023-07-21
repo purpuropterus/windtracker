@@ -1,4 +1,7 @@
 <template>
+
+  <!-- todo: ? direction button -->
+
   <div class="directions" ref="directionsRef">
     <button
       v-for="direction in filteredDirections"
@@ -43,6 +46,7 @@ const filteredDirections = computed(() => {
   margin: 1%;
   width: 10.5%;
   position: relative;
+  background-color: black
 }
 
 .directions-item img {

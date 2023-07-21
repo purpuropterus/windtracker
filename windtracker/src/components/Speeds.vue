@@ -45,9 +45,10 @@ const filteredSpeeds = computed(() => {
 .speeds-item {
     margin: 1%;
     height: 50px;
-    width: 7.0915%;
+    width: 7.0912%;
     font-weight: bold;
     font-size: 2vw;
+    color: white;
 }
 
 .highlighted {

@@ -1,7 +1,7 @@
 <template>
     <div class="settings">
         
-        <h2>Settings</h2>
+        <h3>Settings</h3>
 
         <div class="unit setting">
             <label>Speed unit:</label>

@@ -21,6 +21,9 @@
 
     <KeyboardListener />
 
+
+
+    
   </div>
 
 </template>
@@ -44,6 +47,10 @@ const settingsStore = useSettingsStore();
 
 <style>
 
+body {
+  background-color: #ddd;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -65,7 +72,7 @@ const settingsStore = useSettingsStore();
 
 .right {
   width: 100%;
-  flex: 0.3;
+  flex: 0.2;
 }
 
 

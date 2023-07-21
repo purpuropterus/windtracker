@@ -1,4 +1,4 @@
-<template>
+-<template>
     <div class="speeds" ref="speedsRef">
         <button 
             v-for="speed in filteredSpeeds" 
@@ -6,6 +6,7 @@
             class="speeds-item"
             :class="{ highlighted: speed.m_s == windStore.currentPair[1].m_s }" 
             :key="speed.m_s"
+            :style="{ backgroundColor: speed.color }"
         >
             {{ speed[settingsStore.speedUnit] }}
         </button>

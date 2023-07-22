@@ -35,8 +35,15 @@ const parseWindString = (str) => {
     const matchResult = str.match(/\d+/);
     const speedValue = matchResult ? parseInt(matchResult[0], 10) : 0;
 
-    const directionMatch = str.match(/[A-Za-z]+/);
-    const direction = directionMatch ? directionMatch[0].toUpperCase() : '';
+    let direction = null
+
+    const directionMatch = str.match(/[A-Za-z?/]+/);
+    if (directionMatch) {
+        direction = directionMatch[0].toUpperCase();
+        if (direction === "?" || direction === "/") {
+            direction = "?"; 
+        }
+    }
 
     const directionObject = windStore.wind.directions.find((dir) => dir.id === direction);
     const speedObject =
@@ -54,7 +61,7 @@ const parseWindString = (str) => {
         return null
     }
 
-    if (windStore.usedDirections.includes(directionObject)) {
+    if (windStore.usedDirections.includes(directionObject) && directionObject.id !== "?") {
         error.value = "Direction already used"
         return null
     }

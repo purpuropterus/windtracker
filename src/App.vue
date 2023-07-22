@@ -14,6 +14,7 @@
       </div>
 
       <div class="right">
+        <HistoryEditor />
         <Settings />
       </div>
 
@@ -36,6 +37,7 @@ import Settings from '@/components/Settings.vue'
 import History from '@/components/History.vue'
 import KeyboardListener from '@/components/KeyboardListener.vue'
 import TextMode from '@/components/TextMode.vue'
+import HistoryEditor from '@/components/HistoryEditor.vue'
 
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from './stores/settingsStore';

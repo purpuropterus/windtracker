@@ -1,7 +1,5 @@
 <template>
 
-  <!-- todo: ? direction button -->
-
   <div class="directions" ref="directionsRef">
     <button
       v-for="direction in filteredDirections"
@@ -70,7 +68,7 @@ const filteredDirections = computed(() => {
   color: white;
   padding: 4px;
   font-weight: bold;
-  white-space: nowrap; /* Prevent text from wrapping */
+  white-space: nowrap;
   font-size: 2vw;
 }
 

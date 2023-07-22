@@ -1,7 +1,14 @@
 <template>
     <div class="text-mode">
         <h3>Text Mode</h3>
-        <input v-model="windString" @keypress.enter="handleKey" type="text">
+        <input 
+            class="text-mode-input" 
+            ref="textModeInput" 
+            v-model="windString" 
+            @keypress.enter="handleKey"
+
+            type="text"
+        >
         <p class="error" v-if="error"> {{ error }}</p>
     </div>
 </template>

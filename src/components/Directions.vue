@@ -31,8 +31,12 @@ const props = defineProps({
 const windStore = useWindStore();
 
 const filteredDirections = computed(() => {
-  return props.directions.filter((direction) => !windStore.usedDirections.includes(direction));
+
+  const unknownDirection = windStore.wind.directions.find((dir) => dir.id === "?");
+  return (props.directions.filter((direction) => !windStore.usedDirections.includes(direction) || direction == unknownDirection )) 
+
 });
+
 </script>
 
 <style>
@@ -44,7 +48,7 @@ const filteredDirections = computed(() => {
 
 .directions-item {
   margin: 1%;
-  width: 10.5%;
+  width: 9.1111%;
   position: relative;
   background-color: black
 }

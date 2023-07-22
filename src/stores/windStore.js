@@ -14,6 +14,7 @@ export const useWindStore = defineStore("wind", {
                     { id: "S", img: require("@/assets/s.png")},
                     { id: "SW", img: require("@/assets/sw.png")},
                     { id: "W", img: require("@/assets/w.png")},
+                    { id: "?", img: require("@/assets/unknown.png")}
                 ],
                 speeds: [
 

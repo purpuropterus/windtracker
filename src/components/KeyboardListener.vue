@@ -4,7 +4,7 @@
 
 <script setup>
 
-import { onMounted, onUnmounted, defineEmits } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useWindStore } from '@/stores/windStore';
 

@@ -37,7 +37,7 @@ export const useWindStore = defineStore("wind", {
             usedSpeeds: [],
 
             currentPair: [ {}, {} ],
-            history: [ ],
+            history: [],
 
         }
     },

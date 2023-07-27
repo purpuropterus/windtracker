@@ -3,6 +3,7 @@
         <h3>Text Mode</h3>
         <input v-model="windString" @keypress.enter="handleKey" type="text">
         <p class="error" v-if="error"> {{ error }}</p>
+
     </div>
 </template>
 
@@ -28,7 +29,12 @@ const handleKey = (ev) => {
 
 const parseWindString = (str) => {
 
-    //todo: make capability for putting "?" as a direction (when you miss the direction on 0 wind)
+    console.log(!(windStore.history.length == settingsStore.holes))
+
+    if (windStore.history.length == settingsStore.holes) {
+        error.value = "History is full"
+        return null
+    }
 
     const speedUnit = settingsStore.speedUnit;
 
@@ -83,6 +89,7 @@ const parseWindString = (str) => {
 <style>
     
     .text-mode {
+        margin-top: 5%;
         text-align: left;
     }
     

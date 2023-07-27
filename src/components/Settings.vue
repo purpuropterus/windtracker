@@ -35,6 +35,7 @@
 
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useWindStore } from '@/stores/windStore';
+import { ref, watch } from 'vue';
 
 const settingsStore = useSettingsStore();
 const windStore = useWindStore();

@@ -26,14 +26,18 @@
             <label v-if="settingsStore.resetHotkey">{{ settingsStore.resetHotkey }}</label>
         </div>
 
+        <button class="reset-button" @click="windStore.reset">Reset</button>
+
     </div>
 </template>
 
 <script setup>
 
 import { useSettingsStore } from '@/stores/settingsStore';
+import { useWindStore } from '@/stores/windStore';
 
 const settingsStore = useSettingsStore();
+const windStore = useWindStore();
 
 const handleKey = (ev) => {
     ev.preventDefault();

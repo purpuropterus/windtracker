@@ -13,9 +13,6 @@
                 :key="direction.id"
             >{{ direction.id }}</option>
             </select>
-
-            <p>{{ historyEditorStore.currentlyEditingDirectionId }}</p>
-
         </div>
 
         <div class="speed-select">
@@ -27,11 +24,11 @@
                 :key="speed.m_s"
             >{{ speed[settingsStore.speedUnit] }}</option>
             </select>
-
-            <p>{{ historyEditorStore.currentlyEditingSpeedM_s }}</p>
         </div>
 
         <button class="save" @click="historyEditorStore.save()">Save</button>
+
+        <p class="error">{{ historyEditorStore.error }}</p>
 
     </div>
 
@@ -54,5 +51,9 @@ const historyEditorStore = useHistoryEditorStore();
 
 
 <style scoped>
+
+.error {
+    color:red;
+}
 
 </style>

@@ -53,10 +53,7 @@ const parseWindString = (str) => {
     }
 
     const directionObject = windStore.wind.directions.find((dir) => dir.id === direction);
-    const speedObject =
-    speedUnit === 'mph'
-        ? windStore.wind.speeds.find((spd) => spd.mph === speedValue)
-        : windStore.wind.speeds.find((spd) => spd.m_s === speedValue);
+    const speedObject = windStore.wind.speeds.find((spd) => spd[speedUnit] === speedValue);
 
     if (!directionObject) {
         error.value = "Invalid direction"

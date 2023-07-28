@@ -7,27 +7,31 @@
         <div class="direction-select">
             <label>Direction: </label>
 
-            <select name="direction" id="">
+            <select name="direction" v-model="historyEditorStore.currentlyEditingDirectionId">
             <option :value="direction.id"
                 v-for="direction in windStore.wind.directions"
                 :key="direction.id"
             >{{ direction.id }}</option>
             </select>
 
+            <p>{{ historyEditorStore.currentlyEditingDirectionId }}</p>
+
         </div>
 
         <div class="speed-select">
             <label>Speed: </label>
 
-            <select name="speed" id="">
-            <option :value="speed.mph"
+            <select name="speed" v-model="historyEditorStore.currentlyEditingSpeedM_s">
+            <option :value="speed.m_s"
                 v-for="speed in windStore.wind.speeds"
                 :key="speed.m_s"
             >{{ speed[settingsStore.speedUnit] }}</option>
             </select>
+
+            <p>{{ historyEditorStore.currentlyEditingSpeedM_s }}</p>
         </div>
 
-        <button class="save">Save</button>
+        <button class="save" @click="historyEditorStore.save()">Save</button>
 
     </div>
 

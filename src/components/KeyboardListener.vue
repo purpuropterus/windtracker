@@ -57,6 +57,6 @@ const handleKeyPress = (ev) => {
 
 </script>
 
-<style>
+<style scoped>
 
 </style>

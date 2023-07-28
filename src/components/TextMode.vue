@@ -87,7 +87,7 @@ const parseWindString = (str) => {
 
 </script>
 
-<style>
+<style scoped>
     
     .text-mode {
         text-align: left;

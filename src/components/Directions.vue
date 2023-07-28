@@ -37,7 +37,7 @@ const filteredDirections = computed(() => {
 
 </script>
 
-<style>
+<style scoped>
 .directions {
   display: inline-block;
   text-align: left;

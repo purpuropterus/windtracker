@@ -48,7 +48,7 @@ const handleKey = (ev) => {
 
 </script>
 
-<style>
+<style scoped>
 
 .setting {
     font-size: 1.3vw;

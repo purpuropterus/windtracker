@@ -1,7 +1,5 @@
 <template>
 
-  <!-- todo: ? direction button -->
-
   <div class="directions" ref="directionsRef">
 
     <div class="directions-buttons" v-if="!(windStore.history.length==settingsStore.holes)">
@@ -47,7 +45,7 @@ const filteredDirections = computed(() => {
 
 </script>
 
-<style>
+<style scoped>
 .directions {
   display: inline-block;
   text-align: left;
@@ -79,7 +77,7 @@ const filteredDirections = computed(() => {
   color: white;
   padding: 4px;
   font-weight: bold;
-  white-space: nowrap; /* Prevent text from wrapping */
+  white-space: nowrap;
   font-size: 2vw;
 }
 

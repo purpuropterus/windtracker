@@ -40,7 +40,7 @@ const filteredSpeeds = computed(() => {
 
 </script>
 
-<style>
+<style scoped>
 
 .speeds {
     display: inline-block;

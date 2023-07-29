@@ -3,8 +3,13 @@
   <!-- todo: click last element to undo -->
 
   <div class="history">
-    <div class="history-item" v-for="(item, index) in windStore.history" :key="item.id">
-      <div class="history-item-image">
+    <div 
+      class="history-item" 
+      :class="{ highlighted: index == historyEditorStore.currentlyEditingIndex }"
+      v-for="(item, index) in windStore.history" 
+      :key="item.id"
+    >
+      <div class="history-item-image" @click="historyEditorStore.handleHistoryClick(index)">
         <img :src="item[0].img" :alt="item[0].id" :style="{backgroundColor: item[1].color}" />
         <div class="index-container">
           <p class="history-item-index">{{ index + 1 }}</p>
@@ -18,12 +23,14 @@
 <script setup>
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from '@/stores/settingsStore';
+import { useHistoryEditorStore } from '@/stores/historyEditorStore';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();
+const historyEditorStore = useHistoryEditorStore();
 </script>
 
-<style>
+<style scoped>
 .history {
   width: 100%;
   text-align: left;
@@ -78,4 +85,9 @@ const settingsStore = useSettingsStore();
   transform: translate(-50%, -50%); /* Adjust both vertical and horizontal positions */
   color: white;
 }
+
+.highlighted {
+  background-color: green;
+}
+
 </style>

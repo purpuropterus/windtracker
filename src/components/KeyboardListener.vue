@@ -22,32 +22,41 @@ onUnmounted(() => {
 
 const handleKeyPress = (ev) => {
 
-    // checking for inputs inside .settings divs
+  // checking for inputs inside .settings divs
 
-    const composedPath = ev.composedPath();
+  const composedPath = ev.composedPath();
 
-    const isInsideSettings = composedPath.some((element) =>
+  const isInsideSettings = composedPath.some((element) =>
     element.classList?.contains('settings')
-    );
+  );
 
-    if (isInsideSettings && ev.target.tagName === 'INPUT') {
+  if (isInsideSettings && ev.target.tagName === 'INPUT') {
     return;
-    }
+  }
 
 
 
 
-    switch (ev.key){
+  switch (ev.key){
 
-        case settingsStore.resetHotkey:
+    case settingsStore.resetHotkey:
 
-            windStore.reset();
-            break;
+      windStore.reset()
+      break
 
-    }
-};
+    case "Tab":
+
+      ev.preventDefault()
+      //todo: focus the .text-mode-input input
+
+      break
+
+  }
+
+}
+
 </script>
 
-<style>
+<style scoped>
 
 </style>

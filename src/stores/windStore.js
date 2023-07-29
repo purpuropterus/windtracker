@@ -28,7 +28,7 @@ export const useWindStore = defineStore("wind", {
                 ],
                 speeds: [
 
-                    { m_s: 0, mph: 0, color: "#000000" },
+                    { m_s: 0, mph: 0, color: "#888888" },
                     { m_s: 1, mph: 2, color: "#00a5ff" },
                     { m_s: 2, mph: 4, color: "#0894ff" },
                     { m_s: 3, mph: 6, color: "#3481ff" },

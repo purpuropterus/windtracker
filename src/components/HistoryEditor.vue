@@ -28,7 +28,10 @@
 
         <button class="save" @click="historyEditorStore.save()">Save</button>
 
-        <p class="error">{{ historyEditorStore.error }}</p>
+        <div class="error" v-if="historyEditorStore.error">
+            <p>{{ historyEditorStore.error }}</p>
+            <p>Available winds will not update until error is resolved</p>
+        </div>
 
     </div>
 
@@ -52,7 +55,7 @@ const historyEditorStore = useHistoryEditorStore();
 
 <style scoped>
 
-.error {
+.error p{
     color:red;
 }
 

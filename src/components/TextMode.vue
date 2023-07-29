@@ -9,7 +9,7 @@
 
             type="text"
         >
-        <p class="error" v-if="error"> {{ error }}</p>
+        <p class="error" v-if="error">{{ error }}</p>
     </div>
 </template>
 

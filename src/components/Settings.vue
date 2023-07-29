@@ -11,11 +11,22 @@
             </select>
         </div>
 
+        <div class="holes setting">
+            <label>Holes:</label>
+            <select v-model="settingsStore.holes">
+                <option value="3">3</option>
+                <option value="9">9</option>
+                <option value="18" selected>18</option>
+            </select>
+        </div>
+
         <div class="reset-hotkey setting">
             <label>Reset hotkey:</label>
             <input type="text" @keydown="handleKey" />
             <label v-if="settingsStore.resetHotkey">{{ settingsStore.resetHotkey }}</label>
         </div>
+
+        <button class="reset-button" @click="windStore.reset">Reset</button>
 
     </div>
 </template>
@@ -23,8 +34,11 @@
 <script setup>
 
 import { useSettingsStore } from '@/stores/settingsStore';
+import { useWindStore } from '@/stores/windStore';
+import { ref, watch } from 'vue';
 
 const settingsStore = useSettingsStore();
+const windStore = useWindStore();
 
 const handleKey = (ev) => {
     ev.preventDefault();

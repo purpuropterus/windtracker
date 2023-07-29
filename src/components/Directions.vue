@@ -1,25 +1,32 @@
 <template>
 
   <div class="directions" ref="directionsRef">
-    <button
-      v-for="direction in filteredDirections"
-      :key="direction.id"
-      @click="windStore.handleClick($event, 'direction', direction)"
-      class="directions-item"
-      :class="{ highlighted: direction.id === windStore.currentPair[0].id }"
-    >
-      <div class="image-container">
-        <img class="direction-img" draggable="false" :src="direction.img" :alt="direction.id" />
-        <div class="text-overlay">
-          <p class="direction-id">{{ direction.id }}</p>
+
+    <div class="directions-buttons" v-if="!(windStore.history.length==settingsStore.holes)">
+
+      <button
+        v-for="direction in filteredDirections"
+        :key="direction.id"
+        @click="windStore.handleClick($event, 'direction', direction)"
+        class="directions-item"
+        :class="{ highlighted: direction.id === windStore.currentPair[0].id }"
+      >
+        <div class="image-container">
+          <img class="direction-img" draggable="false" :src="direction.img" :alt="direction.id" />
+          <div class="text-overlay">
+            <p class="direction-id">{{ direction.id }}</p>
+          </div>
         </div>
-      </div>
-    </button>
+      </button>
+
+    </div>
+
   </div>
 </template>
 
 <script setup>
 import { useWindStore } from '@/stores/windStore';
+import { useSettingsStore } from '@/stores/settingsStore';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -27,6 +34,7 @@ const props = defineProps({
 });
 
 const windStore = useWindStore();
+const settingsStore = useSettingsStore();
 
 const filteredDirections = computed(() => {
 
@@ -42,6 +50,7 @@ const filteredDirections = computed(() => {
   display: inline-block;
   text-align: left;
   width: 100%;
+  min-height: 80px;
 }
 
 .directions-item {

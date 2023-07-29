@@ -1,20 +1,30 @@
 import { defineStore } from "pinia"
 
+import nwImage from "@/assets/nw.png"
+import nImage from "@/assets/n.png"
+import neImage from "@/assets/ne.png"
+import eImage from "@/assets/e.png"
+import seImage from "@/assets/se.png"
+import sImage from "@/assets/s.png"
+import swImage from "@/assets/sw.png"
+import wImage from "@/assets/w.png"
+import unknownImage from "@/assets/unknown.png"
+
 export const useWindStore = defineStore("wind", {
     state: () => {
         return {
 
             wind : {
                 directions: [
-                    { id: "NW", img: require("@/assets/nw.png")},
-                    { id: "N", img: require("@/assets/n.png")},
-                    { id: "NE", img: require("@/assets/ne.png")},
-                    { id: "E", img: require("@/assets/e.png")},
-                    { id: "SE", img: require("@/assets/se.png")},
-                    { id: "S", img: require("@/assets/s.png")},
-                    { id: "SW", img: require("@/assets/sw.png")},
-                    { id: "W", img: require("@/assets/w.png")},
-                    { id: "?", img: require("@/assets/unknown.png")}
+                    { id: "NW", img: nwImage },
+                    { id: "N", img: nImage },
+                    { id: "NE", img: neImage },
+                    { id: "E", img: eImage },
+                    { id: "SE", img: seImage },
+                    { id: "S", img: sImage },
+                    { id: "SW", img: swImage },
+                    { id: "W", img: wImage },
+                    { id: "?", img: unknownImage },
                 ],
                 speeds: [
 
@@ -37,7 +47,7 @@ export const useWindStore = defineStore("wind", {
             usedSpeeds: [],
 
             currentPair: [ {}, {} ],
-            history: [ ],
+            history: [],
 
         }
     },
@@ -66,24 +76,47 @@ export const useWindStore = defineStore("wind", {
             }
             
         },
-        addToHistory (arr) {
+        addToHistory (pair) {
 
-            if (arr == null || arr == undefined) {
+            if (pair == null || pair == undefined) {
                 return
             }
 
             //push it to history
-            this.history.push(arr)
+            this.history.push(pair)
 
             //push direction to used directions
-            this.usedDirections.push(arr[0]);
-            this.usedSpeeds.push(arr[1]);
+            this.usedDirections.push(pair[0]);
+            this.usedSpeeds.push(pair[1]);
 
 
             //clear it
             this.currentPair = [ {}, {} ]
 
             if (this.usedDirections.length == 8) {
+
+                //autofilling unknown directions//
+
+                let unknownDirection = this.wind.directions.find(direction => direction.id === "?")
+
+                //if there is exactly one unknown direction in the group of 8
+                if (this.usedDirections.filter(item => item === unknownDirection).length == 1) {
+                   
+                    //replace the unknown direction in the history with the only one not inside this.usedDirections
+                    let unknownPairIndex = this.history.length - 8 + this.usedDirections.indexOf(unknownDirection)
+
+                    let remainingDirection = this.wind.directions.find(item => !this.usedDirections.includes(item))
+
+                    console.log(remainingDirection)
+
+                    console.log(JSON.stringify(this.history))
+
+                    this.history[unknownPairIndex][0] = remainingDirection
+
+                    console.log(JSON.stringify(this.history))
+
+                }
+
                 this.usedDirections = []
             }
 

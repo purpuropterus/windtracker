@@ -1,15 +1,21 @@
 -<template>
     <div class="speeds" ref="speedsRef">
-        <button 
-            v-for="speed in filteredSpeeds" 
-            @click="windStore.handleClick($event, 'speed', speed)" 
-            class="speeds-item"
-            :class="{ highlighted: speed.m_s == windStore.currentPair[1].m_s }" 
-            :key="speed.m_s"
-            :style="{ backgroundColor: speed.color }"
-        >
-            {{ speed[settingsStore.speedUnit] }}
-        </button>
+
+        <div class="speeds-buttons" v-if="!(windStore.history.length==settingsStore.holes)">
+
+            <button 
+                v-for="speed in filteredSpeeds" 
+                @click="windStore.handleClick($event, 'speed', speed)" 
+                class="speeds-item"
+                :class="{ highlighted: speed.m_s == windStore.currentPair[1].m_s }" 
+                :key="speed.m_s"
+                :style="{ backgroundColor: speed.color }"
+            >
+                {{ speed[settingsStore.speedUnit] }}
+            </button>
+
+        </div>
+
     </div>
 </template>
 
@@ -40,6 +46,7 @@ const filteredSpeeds = computed(() => {
     display: inline-block;
     width: 100%;
     text-align: left;
+    min-height: 60px;
 }
 
 .speeds-item {

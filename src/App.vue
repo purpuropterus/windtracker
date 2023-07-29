@@ -7,10 +7,17 @@
     <div class="parent">
 
       <div class="left">
-        <Directions :directions="windStore.wind.directions"/>
-        <Speeds :speeds="windStore.wind.speeds"/>
-        <History />
-        <TextMode />
+
+        <div class="top-left">
+          <Directions :directions="windStore.wind.directions"/>
+          <Speeds :speeds="windStore.wind.speeds"/>
+          <History />
+        </div>
+
+        <div class="bottom-left">
+          <TextMode />
+        </div>
+
       </div>
 
       <div class="right">
@@ -69,7 +76,10 @@ body {
 .left {
   width: 100%;
   flex: 1;
+  height: 100%;
 }
+
+
 
 .right {
   width: 100%;

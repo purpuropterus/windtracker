@@ -1,7 +1,7 @@
--<template>
+<template>
     <div class="speeds" ref="speedsRef">
 
-        <div class="speeds-buttons" v-if="!(windStore.history.length==settingsStore.holes)">
+        <div class="speeds-buttons" v-if="!(windStore.historyLength==settingsStore.holes)">
 
             <button 
                 v-for="speed in filteredSpeeds" 
@@ -43,16 +43,21 @@ const filteredSpeeds = computed(() => {
 <style scoped>
 
 .speeds {
-    display: inline-block;
+    margin-top: 0.7vh;
     width: 100%;
     text-align: left;
-    min-height: 60px;
+    height: 60px;
+
+}
+
+.speeds-buttons {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 0.5vw;
+    height: 60px
 }
 
 .speeds-item {
-    margin: 1%;
-    height: 50px;
-    width: 7.0912%;
     font-weight: bold;
     font-size: 2vw;
     color: white;

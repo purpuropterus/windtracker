@@ -2,8 +2,6 @@
 
   <div class="app">
 
-
-
     <div class="parent">
 
       <div class="left">
@@ -48,6 +46,8 @@ import HistoryEditor from '@/components/HistoryEditor.vue'
 
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from './stores/settingsStore';
+
+import { onMounted } from 'vue';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();

@@ -9,6 +9,8 @@ import sImage from "@/assets/s.png"
 import swImage from "@/assets/sw.png"
 import wImage from "@/assets/w.png"
 import unknownImage from "@/assets/unknown.png"
+import { useSettingsStore } from "./settingsStore"
+
 
 export const useWindStore = defineStore("wind", {
     state: () => {
@@ -47,8 +49,13 @@ export const useWindStore = defineStore("wind", {
             usedSpeeds: [],
 
             currentPair: [ {}, {} ],
-            history: [],
+            history: [ ],
 
+        }
+    },
+    getters: {
+        historyLength () {
+            return this.history.filter(item => !item.every(obj => Object.keys(obj).length === 0)).length
         }
     },
     actions: {
@@ -83,7 +90,7 @@ export const useWindStore = defineStore("wind", {
             }
 
             //push it to history
-            this.history.push(pair)
+            this.history[this.historyLength] = pair
 
             //push direction to used directions
             this.usedDirections.push(pair[0]);
@@ -103,7 +110,7 @@ export const useWindStore = defineStore("wind", {
                 if (this.usedDirections.filter(item => item === unknownDirection).length == 1) {
                    
                     //replace the unknown direction in the history with the only one not inside this.usedDirections
-                    let unknownPairIndex = this.history.length - 8 + this.usedDirections.indexOf(unknownDirection)
+                    let unknownPairIndex = this.historyLength - 8 + this.usedDirections.indexOf(unknownDirection)
 
                     let remainingDirection = this.wind.directions.find(item => !this.usedDirections.includes(item))
 
@@ -128,9 +135,19 @@ export const useWindStore = defineStore("wind", {
             this.usedDirections = []
             this.usedSpeeds = []
             this.currentPair = [ {}, {} ]
-            this.history = []
+            this.history = this.createEmptyHistory()
 
-            // todo: clear windString in TextMode.vue
-        }
+        },
+        createEmptyHistory () {
+            const settingsStore = useSettingsStore()
+            
+            let history = []
+
+            for (let i = 0; i < settingsStore.holes ; i++) {
+                history.push([{}, {}])
+            }
+
+            return history
+        },
     },
 })

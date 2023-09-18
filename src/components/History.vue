@@ -17,7 +17,7 @@
         :key="item.id"
       >
 
-        <div class="history-item-image" @click="Object.keys(item[0]).length ? historyEditorStore.handleHistoryClick(index) : null" :style="{backgroundColor: Object.keys(item[0]).length!=0?item[1].color:'white'}">
+        <div class="history-item-image" @click="Object.keys(item[0]).length ? historyEditorStore.handleHistoryClick(index) : null" :style="{backgroundColor: Object.keys(item[0]).length!=0?(item[1].color?item[1].color:'black'):'white'}">
           <div class="bg-div">
 
           </div>
@@ -25,7 +25,8 @@
           <div class="index-container">
             <p class="history-item-index">{{ index + 1 }}</p>
           </div>
-          <p class="history-item-id">{{ item[1][settingsStore.speedUnit] }}{{ item[0]["id"] }}</p>
+          <p v-if="item[2].text" class="history-item-id">{{ item[2].text }}</p>
+          <p v-else class="history-item-id">{{ item[1][settingsStore.speedUnit] }}{{ item[0]["id"] }}</p>
         </div>
       </div>
     </div>

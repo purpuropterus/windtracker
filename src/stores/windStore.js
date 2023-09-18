@@ -53,14 +53,17 @@ export const useWindStore = defineStore("wind", {
             usedDirections: [],
             usedSpeeds: [],
 
-            currentPair: [ {}, {} ],
+            currentPair: [ {}, {}, {} ],
             history: [ ],
+
+            afterZeroDirection: null,
 
         }
     },
     getters: {
         historyLength () {
-            return this.history.filter(item => !item.every(obj => Object.keys(obj).length === 0)).length
+            //return amount of items in history where item[1] is not empty
+            return this.history.filter(item => item[1].m_s !== undefined).length
         },
         wsrSpeeds () {
             return this.wind.speeds.filter(speed => !speed.ogOnly)
@@ -102,17 +105,22 @@ export const useWindStore = defineStore("wind", {
             //push it to history
             this.history[this.historyLength] = pair
 
+            if (this.afterZeroDirection) {
+                this.ogAfterZeroWindProcedure()
+            }
+
             //push direction to used directions
             if (!(pair[1].m_s == 0) || !(settingsStore.game == "og")) {
                 this.usedDirections.push(pair[0]);
+            } else {
+                this.ogZeroWindProcedure()
             }
             this.usedSpeeds.push(pair[1]);
 
-
             //clear it
-            this.currentPair = [ {}, {} ]
+            this.currentPair = [ {}, {}, {} ]
 
-            if (this.usedDirections.length == 8) {
+            if (this.usedDirections.length == 8 && settingsStore.game == "wsr") {
 
                 //autofilling unknown directions//
 
@@ -143,10 +151,43 @@ export const useWindStore = defineStore("wind", {
                 this.usedSpeeds = []
             }
         },
+        ogZeroWindProcedure () {
+            let zeroDirection = this.history[this.historyLength-1][0]
+
+            if (zeroDirection.id == "?") {
+                return
+            }
+
+            if (this.historyLength == 8) {
+                this.history[8][0] = zeroDirection
+                return
+            }
+
+            this.history[this.historyLength][0] = zeroDirection
+            this.history[this.historyLength][2].text = `${zeroDirection.id}: 9/16` 
+
+            this.history[8][0] = zeroDirection
+            this.history[8][2].text = `${zeroDirection.id}: 7/16`
+
+            this.afterZeroDirection = zeroDirection;
+        },
+        ogAfterZeroWindProcedure () {
+            console.log('hi')
+
+            let afterZeroDirection = this.afterZeroDirection
+
+            this.history[8][2] = {}
+
+            if (this.currentPair[0] == afterZeroDirection) {
+                this.history[8][0] = {}
+            }
+
+            this.afterZeroDirection = null
+        },
         reset () {
             this.usedDirections = []
             this.usedSpeeds = []
-            this.currentPair = [ {}, {} ]
+            this.currentPair = [ {}, {}, {} ]
             this.history = this.createEmptyHistory()
 
         },
@@ -156,7 +197,7 @@ export const useWindStore = defineStore("wind", {
             let history = []
 
             for (let i = 0; i < settingsStore.holes ; i++) {
-                history.push([{}, {}])
+                history.push([{}, {}, {}])
             }
 
             return history

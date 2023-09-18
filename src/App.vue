@@ -2,6 +2,9 @@
 
   <div class="app">
 
+    <p>{{ windStore.history }}</p>
+    <p>historyLength={{ windStore.historyLength }}</p>
+
     <div class="parent">
 
       <div class="left">

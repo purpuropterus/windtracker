@@ -73,7 +73,8 @@ const parseWindString = (str) => {
 
     error.value = ""
 
-    return [ directionObject, speedObject ];
+    console.log([ directionObject, speedObject ])
+    return [ directionObject, speedObject, {} ];
 
 }
 

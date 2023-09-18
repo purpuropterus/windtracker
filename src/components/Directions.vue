@@ -38,8 +38,7 @@ const settingsStore = useSettingsStore();
 
 const filteredDirections = computed(() => {
 
-  const unknownDirection = windStore.wind.directions.find((dir) => dir.id === "?");
-  return (props.directions.filter((direction) => !windStore.usedDirections.includes(direction) || direction == unknownDirection )) 
+  return (props.directions.filter((direction) => !windStore.usedDirections.includes(direction) )) 
 
 });
 

@@ -20,8 +20,10 @@ let error = ref("")
 
 const handleKey = (ev) => {
     ev.preventDefault()
-    
-    windStore.addToHistory(parseWindString(windString.value))
+
+    if(parseWindString(windString.value)){
+        windStore.addToHistory(parseWindString(windString.value))
+    }
 
     windString.value = ""
 }
@@ -73,7 +75,7 @@ const parseWindString = (str) => {
 
     error.value = ""
 
-    console.log([ directionObject, speedObject ])
+    windStore.currentPair = [ directionObject, speedObject, {} ];
     return [ directionObject, speedObject, {} ];
 
 }

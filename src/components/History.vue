@@ -4,7 +4,11 @@
 
   <!-- <div> -->
     <!-- <p>{{ windStore.history }}</p> -->
-    <div class="history">
+    <div class="history"
+      :style="{
+        gridTemplateColumns: settingsStore.game == 'og' ? 'repeat(9, 1fr)' : 'repeat(18, 1fr)'
+      }"
+    >
 
       <div 
         class="history-item" 
@@ -49,8 +53,6 @@ windStore.history = windStore.createEmptyHistory()
   height: 100%;
   text-align: left;
   display: grid;
-  grid-template-columns: repeat(18, 1fr);
-  margin-top: 0.7vh;
   gap: 0.5vw;
 }
 

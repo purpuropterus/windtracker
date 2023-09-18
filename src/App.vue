@@ -8,7 +8,7 @@
 
         <div class="top-left">
           <Directions :directions="windStore.wind.directions"/>
-          <Speeds :speeds="windStore.wind.speeds"/>
+          <Speeds :speeds="settingsStore.game == 'og' ? windStore.wind.speeds : windStore.wsrSpeeds "/>
           <History />
         </div>
 

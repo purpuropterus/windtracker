@@ -27,10 +27,8 @@ const handleKey = (ev) => {
 }
 
 const parseWindString = (str) => {
-
-    console.log(!(windStore.history.length == settingsStore.holes))
-
-    if (windStore.history.length == settingsStore.holes) {
+    
+    if (windStore.historyLength == settingsStore.holes) {
         error.value = "History is full"
         return null
     }

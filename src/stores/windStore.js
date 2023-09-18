@@ -40,7 +40,12 @@ export const useWindStore = defineStore("wind", {
                     { m_s: 7, mph: 14, color: "#8f53e8" },
                     { m_s: 8, mph: 16, color: "#a648b9" },
                     { m_s: 9, mph: 18, color: "#c53c9d" },
-                    { m_s: 10, mph: 20, color: "#c43584" },
+                    { m_s: 10, mph: 20, color: "#c43584"},
+                    { m_s: 11, mph: 22, color: "#c22d6b", ogOnly: true},
+                    { m_s: 12, mph: 24, color: "#c12452", ogOnly: true},
+                    { m_s: 13, mph: 26, color: "#c11b3a", ogOnly: true},
+                    { m_s: 14, mph: 28, color: "#c11323", ogOnly: true},
+                    { m_s: 15, mph: 30, color: "#c10c0c", ogOnly: true},
 
                 ]
             },
@@ -56,6 +61,9 @@ export const useWindStore = defineStore("wind", {
     getters: {
         historyLength () {
             return this.history.filter(item => !item.every(obj => Object.keys(obj).length === 0)).length
+        },
+        wsrSpeeds () {
+            return this.wind.speeds.filter(speed => !speed.ogOnly)
         }
     },
     actions: {
@@ -85,6 +93,8 @@ export const useWindStore = defineStore("wind", {
         },
         addToHistory (pair) {
 
+            const settingsStore = useSettingsStore()
+
             if (pair == null || pair == undefined) {
                 return
             }
@@ -93,7 +103,9 @@ export const useWindStore = defineStore("wind", {
             this.history[this.historyLength] = pair
 
             //push direction to used directions
-            this.usedDirections.push(pair[0]);
+            if (!(pair[1].m_s == 0) || !(settingsStore.game == "og")) {
+                this.usedDirections.push(pair[0]);
+            }
             this.usedSpeeds.push(pair[1]);
 
 

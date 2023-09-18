@@ -4,8 +4,9 @@ export const useSettingsStore = defineStore("settings", {
     state: () => {
 
         return {
+            game: "wsr",
             speedUnit: "mph",
-            holes: 18,
+            holes: 9,
             resetHotkey: null,
         }
 

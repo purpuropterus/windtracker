@@ -1,7 +1,10 @@
 <template>
     <div class="speeds" ref="speedsRef">
 
-        <div class="speeds-buttons" v-if="!(windStore.historyLength==settingsStore.holes)">
+        <div class="speeds-buttons" 
+            v-if="!(windStore.historyLength==settingsStore.holes)" 
+            :style="{gridTemplateColumns: settingsStore.game == 'og' ? 'repeat(16, 1fr)' : 'repeat(11, 1fr)'}"
+        >
 
             <button 
                 v-for="speed in filteredSpeeds" 
@@ -44,6 +47,7 @@ const filteredSpeeds = computed(() => {
 
 .speeds {
     margin-top: 0.7vh;
+    margin-bottom: 4vh;
     width: 100%;
     text-align: left;
     height: 60px;

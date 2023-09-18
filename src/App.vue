@@ -2,6 +2,11 @@
 
   <div class="app">
 
+    <!-- <p>{{ windStore.history }}</p>
+    <p>historyLength={{ windStore.historyLength }}</p>
+    <p>usedDirections={{ windStore.usedDirections }}</p>
+    <p>usedSpeeds={{ windStore.usedSpeeds }}</p>
+    <p>zeroDirection={{ windStore.zeroDirection }}</p> -->
 
 
     <div class="parent">
@@ -10,7 +15,7 @@
 
         <div class="top-left">
           <Directions :directions="windStore.wind.directions"/>
-          <Speeds :speeds="windStore.wind.speeds"/>
+          <Speeds :speeds="settingsStore.game == 'og' ? windStore.wind.speeds : windStore.wsrSpeeds "/>
           <History />
         </div>
 
@@ -48,6 +53,8 @@ import HistoryEditor from '@/components/HistoryEditor.vue'
 
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from './stores/settingsStore';
+
+import { onMounted } from 'vue';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();

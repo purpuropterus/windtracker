@@ -9,6 +9,8 @@ import sImage from "@/assets/s.png"
 import swImage from "@/assets/sw.png"
 import wImage from "@/assets/w.png"
 import unknownImage from "@/assets/unknown.png"
+import { useSettingsStore } from "./settingsStore"
+
 
 export const useWindStore = defineStore("wind", {
     state: () => {
@@ -38,7 +40,12 @@ export const useWindStore = defineStore("wind", {
                     { m_s: 7, mph: 14, color: "#8f53e8" },
                     { m_s: 8, mph: 16, color: "#a648b9" },
                     { m_s: 9, mph: 18, color: "#c53c9d" },
-                    { m_s: 10, mph: 20, color: "#c43584" },
+                    { m_s: 10, mph: 20, color: "#c43584"},
+                    { m_s: 11, mph: 22, color: "#c22d6b", ogOnly: true},
+                    { m_s: 12, mph: 24, color: "#c12452", ogOnly: true},
+                    { m_s: 13, mph: 26, color: "#c11b3a", ogOnly: true},
+                    { m_s: 14, mph: 28, color: "#c11323", ogOnly: true},
+                    { m_s: 15, mph: 30, color: "#c10c0c", ogOnly: true},
 
                 ]
             },
@@ -46,9 +53,21 @@ export const useWindStore = defineStore("wind", {
             usedDirections: [],
             usedSpeeds: [],
 
-            currentPair: [ {}, {} ],
-            history: [],
+            currentPair: [ {}, {}, {} ],
+            history: [ ],
 
+            zeroDirection: null,
+            doAfterZero: null,
+
+        }
+    },
+    getters: {
+        historyLength () {
+            //return amount of items in history where item[0] AND item[1] is not empty
+            return this.history.filter(item => item[0] != {} && (item[1].m_s != (null||undefined))).length
+        },
+        wsrSpeeds () {
+            return this.wind.speeds.filter(speed => !speed.ogOnly)
         }
     },
     actions: {
@@ -71,6 +90,8 @@ export const useWindStore = defineStore("wind", {
 
             if (this.currentPair[0]?.id && this.currentPair[1]?.m_s !== undefined) {
 
+
+                console.log(JSON.stringify(this.currentPair))
                 this.addToHistory(this.currentPair)
 
             }
@@ -78,22 +99,38 @@ export const useWindStore = defineStore("wind", {
         },
         addToHistory (pair) {
 
+            const settingsStore = useSettingsStore()
+
             if (pair == null || pair == undefined) {
                 return
             }
 
             //push it to history
-            this.history.push(pair)
+            this.history[this.historyLength] = pair
+
+            if (this.doAfterZero) {
+                this.ogAfterZeroWindProcedure()
+            }
 
             //push direction to used directions
-            this.usedDirections.push(pair[0]);
+            if (!(pair[1].m_s == 0) || !(settingsStore.game == "og")) {
+                if (pair[0].id != "?" && !this.usedDirections.includes(pair[0])) {
+                    this.usedDirections.push(pair[0]);
+                }
+            } else {
+                this.ogZeroWindProcedure()
+            }
+            
             this.usedSpeeds.push(pair[1]);
 
+            if (this.historyLength == 8 && settingsStore.game == "og") {
+                this.ogHole8Procedure()
+            }
 
             //clear it
-            this.currentPair = [ {}, {} ]
+            this.currentPair = [ {}, {}, {} ]
 
-            if (this.usedDirections.length == 8) {
+            if (this.usedDirections.length == 8 && settingsStore.game == "wsr") {
 
                 //autofilling unknown directions//
 
@@ -103,17 +140,11 @@ export const useWindStore = defineStore("wind", {
                 if (this.usedDirections.filter(item => item === unknownDirection).length == 1) {
                    
                     //replace the unknown direction in the history with the only one not inside this.usedDirections
-                    let unknownPairIndex = this.history.length - 8 + this.usedDirections.indexOf(unknownDirection)
+                    let unknownPairIndex = this.historyLength - 8 + this.usedDirections.indexOf(unknownDirection)
 
                     let remainingDirection = this.wind.directions.find(item => !this.usedDirections.includes(item))
 
-                    console.log(remainingDirection)
-
-                    console.log(JSON.stringify(this.history))
-
                     this.history[unknownPairIndex][0] = remainingDirection
-
-                    console.log(JSON.stringify(this.history))
 
                 }
 
@@ -124,13 +155,83 @@ export const useWindStore = defineStore("wind", {
                 this.usedSpeeds = []
             }
         },
+        ogZeroWindProcedure () {
+            let zeroDirection = this.history[this.historyLength-1][0]
+
+            if (zeroDirection.id == "?") {
+                return
+            }
+
+            if (this.historyLength == 8) {
+                this.history[8][0] = zeroDirection
+                return
+            }
+
+            this.history[this.historyLength][0] = zeroDirection
+            this.history[this.historyLength][2].text = `${zeroDirection.id}: 9/16` 
+
+            this.history[8][0] = zeroDirection
+            this.history[8][2].text = `${zeroDirection.id}: 7/16`
+
+            this.zeroDirection = zeroDirection;
+
+            this.doAfterZero = true;
+        },
+        ogAfterZeroWindProcedure () {
+
+            let zeroDirection = this.zeroDirection
+
+            this.usedDirections.push(zeroDirection)
+
+            this.history[8][2] = {}
+
+            if (this.currentPair[0] == zeroDirection) {
+                this.history[8][0] = {}
+            }
+
+            this.doAfterZero = false
+        },
+        ogHole8Procedure () {
+        
+            const zeroSpeed = this.wind.speeds.find(speed => speed.m_s == 0)
+            const unusedDirection = this.wind.directions.find(direction => !this.usedDirections.includes(direction) && direction.id != "?")
+
+            console.log(`unusedDirection: ${JSON.stringify(unusedDirection)}`)
+            const unknownDirection = this.wind.directions.find(direction => direction.id == "?")
+            
+            if (unusedDirection == undefined && this.zeroDirection == null) {
+                this.history[8][1] = zeroSpeed
+                this.history[8][0] = unknownDirection
+            } else {
+                if (this.usedDirections.length == 7) {
+                    if (unusedDirection){
+                        this.history[8][0] = unusedDirection
+                    }
+                    this.usedDirections.push(unknownDirection)
+                } else if (this.zeroDirection) {
+                    // includes everything besides zeroDirection
+                    this.usedDirections = this.wind.directions.filter(direction => direction != this.zeroDirection)
+                }
+            }
+
+        },
         reset () {
             this.usedDirections = []
             this.usedSpeeds = []
-            this.currentPair = [ {}, {} ]
-            this.history = []
+            this.currentPair = [ {}, {}, {} ]
+            this.history = this.createEmptyHistory()
 
-            // todo: clear windString in TextMode.vue
-        }
+        },
+        createEmptyHistory () {
+            const settingsStore = useSettingsStore()
+            
+            let history = []
+
+            for (let i = 0; i < settingsStore.holes ; i++) {
+                history.push([{}, {}, {}])
+            }
+
+            return history
+        },
     },
 })

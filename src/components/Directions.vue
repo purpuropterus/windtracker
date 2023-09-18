@@ -2,7 +2,7 @@
 
   <div class="directions" ref="directionsRef">
 
-    <div class="directions-buttons" v-if="!(windStore.history.length==settingsStore.holes)">
+    <div class="directions-buttons" v-if="!(windStore.historyLength==settingsStore.holes)">
 
       <button
         v-for="direction in filteredDirections"
@@ -38,8 +38,7 @@ const settingsStore = useSettingsStore();
 
 const filteredDirections = computed(() => {
 
-  const unknownDirection = windStore.wind.directions.find((dir) => dir.id === "?");
-  return (props.directions.filter((direction) => !windStore.usedDirections.includes(direction) || direction == unknownDirection )) 
+  return (props.directions.filter((direction) => !windStore.usedDirections.includes(direction) )) 
 
 });
 
@@ -47,15 +46,17 @@ const filteredDirections = computed(() => {
 
 <style scoped>
 .directions {
-  display: inline-block;
   text-align: left;
   width: 100%;
-  min-height: 80px;
+}
+
+.directions-buttons {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0.5vw;
 }
 
 .directions-item {
-  margin: 1%;
-  width: 9.1111%;
   position: relative;
   background-color: black
 }

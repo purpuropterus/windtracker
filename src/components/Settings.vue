@@ -3,6 +3,14 @@
         
         <h3>Settings</h3>
 
+        <div class="game setting">
+            <label>Game:</label>
+            <select v-model="settingsStore.game">
+                <option value="og">Wii Sports</option>
+                <option value="wsr" selected>Wii Sports Resort</option>
+            </select>
+        </div>
+
         <div class="unit setting">
             <label>Speed unit:</label>
             <select v-model="settingsStore.speedUnit">
@@ -14,9 +22,8 @@
         <div class="holes setting">
             <label>Holes:</label>
             <select v-model="settingsStore.holes">
-                <option value="3">3</option>
-                <option value="9">9</option>
-                <option value="18" selected>18</option>
+                <option value="9" selected>9</option>
+                <option v-if="settingsStore.game == 'wsr'" value="18">18</option>
             </select>
         </div>
 

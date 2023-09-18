@@ -20,17 +20,17 @@ let error = ref("")
 
 const handleKey = (ev) => {
     ev.preventDefault()
-    
-    windStore.addToHistory(parseWindString(windString.value))
+
+    if(parseWindString(windString.value)){
+        windStore.addToHistory(parseWindString(windString.value))
+    }
 
     windString.value = ""
 }
 
 const parseWindString = (str) => {
-
-    console.log(!(windStore.history.length == settingsStore.holes))
-
-    if (windStore.history.length == settingsStore.holes) {
+    
+    if (windStore.historyLength == settingsStore.holes) {
         error.value = "History is full"
         return null
     }
@@ -75,7 +75,8 @@ const parseWindString = (str) => {
 
     error.value = ""
 
-    return [ directionObject, speedObject ];
+    windStore.currentPair = [ directionObject, speedObject, {} ];
+    return [ directionObject, speedObject, {} ];
 
 }
 

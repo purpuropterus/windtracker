@@ -8,9 +8,6 @@ import { onMounted, onUnmounted } from 'vue';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useWindStore } from '@/stores/windStore';
 
-import { defineEmits } from 'vue';
-const emit = defineEmits(['tabPressed'])
-
 const settingsStore = useSettingsStore();
 const windStore = useWindStore();
 

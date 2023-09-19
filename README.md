@@ -8,5 +8,5 @@ NPM
 > npm run serve
 ```
 ## Contribution
-Feel free to pull request.
+Feel free to pull request
 

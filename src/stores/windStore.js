@@ -168,10 +168,10 @@ export const useWindStore = defineStore("wind", {
             }
 
             this.history[this.historyLength][0] = zeroDirection
-            this.history[this.historyLength][2].text = `${zeroDirection.id}: 9/16` 
+            this.history[this.historyLength][2].text = `${zeroDirection.id}: 56.25%` 
 
             this.history[8][0] = zeroDirection
-            this.history[8][2].text = `${zeroDirection.id}: 7/16`
+            this.history[8][2].text = `${zeroDirection.id}: 43.75%`
 
             this.zeroDirection = zeroDirection;
 

@@ -11,24 +11,22 @@
 
     <div class="parent">
 
-      <div class="left">
-
-        <div class="top-left">
+        <div class="top">
           <Directions :directions="windStore.wind.directions"/>
           <Speeds :speeds="settingsStore.game == 'og' ? windStore.wind.speeds : windStore.wsrSpeeds "/>
           <History />
         </div>
 
-        <div class="bottom-left">
-          <TextMode />
+        <div class="bottom">
+          <div class="bottom-left">
+            <TextMode />
+          </div>
+          <div class="bottom-right">
+            <HistoryEditor />
+            <Settings />
+          </div>
         </div>
 
-      </div>
-
-      <div class="right">
-        <HistoryEditor />
-        <Settings />
-      </div>
 
     </div>
 
@@ -65,33 +63,80 @@ const settingsStore = useSettingsStore();
 
 body {
   background-color: #ddd;
+  margin: 0;
 }
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
 .parent {
-  display: flex;
-  flex-flow: row;
+  max-height: 100vh;
+  height: 100%;
+  width: 100%;
+  /* display: flex;
+  flex-direction: column; */
 }
 
-.left {
-  width: 100%;
+
+.top {
+  height: calc(30vw - 1vw);
+  min-height: calc(60vh - 1vw);
+  width: calc(100% - 2vw);
+
+
+  padding-top: 1vw;
+  margin: 0 1vw;
+
+  background-color: #ddd;
+}
+
+.bottom {
+
+  display: flex;
+  flex-direction: row;
+
+  height: 40%;
+  width: calc(100% - 2vw);
+
+  margin: 0 1vw;
+
+}
+
+.bottom-left {
   flex: 1;
   height: 100%;
-}
-
-
-
-.right {
   width: 100%;
-  flex: 0.2;
 }
 
+.bottom-right > * {
+  margin-left: 2rem;
+}
+
+
+.bottom-right {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+
+
+  height: 100%;
+  width: 100%;
+}
+
+select {
+    font-size: 1.3vw;
+}
+
+label {
+    margin-right: 0.3vw;
+    font-size: 1.3vw;
+}
 
 </style>

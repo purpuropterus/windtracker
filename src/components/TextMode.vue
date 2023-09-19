@@ -1,7 +1,7 @@
 <template>
     <div class="text-mode">
         <h3>Text Mode</h3>
-        <input v-model="windString" @keypress.enter="handleKey" type="text">
+        <input v-model="windString" @keypress.enter="handleKey" ref="textModeInput" @tabPressed="handleTabPressed" type="text" tabindex="0">
         <p class="error" v-if="error"> {{ error }}</p>
     </div>
 </template>
@@ -26,6 +26,11 @@ const handleKey = (ev) => {
     }
 
     windString.value = ""
+}
+
+const handleTabPressed = () => {
+    console.log("test3")
+    this.$refs.textModeInput.focus()
 }
 
 const parseWindString = (str) => {
@@ -86,17 +91,18 @@ const parseWindString = (str) => {
 <style scoped>
     
     .text-mode {
-        margin-top: 5%;
         text-align: left;
-    }
-    
-    .text-mode * {
-        display:inline-block;
-        margin: 1%;
     }
 
     .error {
         color: red;
+    }
+
+    input {
+        height: 100%;
+        width: 10rem;
+        padding: 1rem;
+        font-size: 2rem;
     }
 
 </style>

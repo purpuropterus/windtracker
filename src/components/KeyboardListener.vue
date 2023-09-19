@@ -8,6 +8,9 @@ import { onMounted, onUnmounted } from 'vue';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useWindStore } from '@/stores/windStore';
 
+import { defineEmits } from 'vue';
+const emit = defineEmits(['tabPressed'])
+
 const settingsStore = useSettingsStore();
 const windStore = useWindStore();
 
@@ -43,14 +46,7 @@ const handleKeyPress = (ev) => {
 
       windStore.reset()
       break
-
-    case "Tab":
-
-      ev.preventDefault()
-      //todo: focus the .text-mode-input input
-
-      break
-
+  
   }
 
 }

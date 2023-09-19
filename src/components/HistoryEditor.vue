@@ -54,9 +54,12 @@ const historyEditorStore = useHistoryEditorStore();
 
 
 <style scoped>
-
 .error p{
     color:red;
+}
+
+.save {
+    font-size: 1.3vw;
 }
 
 </style>

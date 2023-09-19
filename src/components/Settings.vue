@@ -5,7 +5,7 @@
 
         <div class="game setting">
             <label>Game:</label>
-            <select v-model="settingsStore.game">
+            <select v-model="settingsStore.game" tabindex="-1">
                 <option value="og">Wii Sports</option>
                 <option value="wsr" selected>Wii Sports Resort</option>
             </select>
@@ -13,7 +13,7 @@
 
         <div class="unit setting">
             <label>Speed unit:</label>
-            <select v-model="settingsStore.speedUnit">
+            <select v-model="settingsStore.speedUnit" tabindex="-1">
                 <option value="mph" selected>mph</option>
                 <option value="m_s">m/s</option>
             </select>
@@ -21,7 +21,7 @@
 
         <div class="holes setting">
             <label>Holes:</label>
-            <select v-model="settingsStore.holes">
+            <select v-model="settingsStore.holes" tabindex="-1">
                 <option value="9" selected>9</option>
                 <option v-if="settingsStore.game == 'wsr'" value="18">18</option>
             </select>
@@ -29,11 +29,11 @@
 
         <div class="reset-hotkey setting">
             <label>Reset hotkey:</label>
-            <input type="text" @keydown="handleKey" />
+            <input type="text" @keydown="handleKey" tabindex="-1" />
             <label v-if="settingsStore.resetHotkey">{{ settingsStore.resetHotkey }}</label>
         </div>
 
-        <button class="reset-button" @click="windStore.reset">Reset</button>
+        <button class="reset-button" @click="windStore.reset" tabindex="-1">Reset</button>
 
     </div>
 </template>
@@ -61,18 +61,18 @@ const handleKey = (ev) => {
     font-size: 1.3vw;
 }
 
-.setting * {
-    display: inline-block;
-    margin: 1%
-}
-
-.settings div {
-    margin: 5%;
-}
 
 .setting input {
     width: 10%;
     font-size: 1.3vw;
+    margin-right: 0.3vw;
+}
+.reset-button {
+    font-size: 1.3vw;
+}
+
+.setting {
+    margin-bottom: 0.5vh;
 }
 
 </style>

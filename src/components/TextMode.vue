@@ -1,7 +1,7 @@
 <template>
     <div class="text-mode">
         <h3>Text Mode</h3>
-        <input v-model="windString" @keypress.enter="handleKey" ref="textModeInput" @tabPressed="handleTabPressed" type="text" tabindex="0">
+        <input v-model="windString" @keypress.enter="handleKey" type="text" tabindex="0">
         <p class="error" v-if="error"> {{ error }}</p>
     </div>
 </template>
@@ -10,10 +10,12 @@
 
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useWindStore } from '@/stores/windStore';
+import { useHistoryEditorStore } from '@/stores/historyEditorStore';
 import { ref } from 'vue';
 
 const settingsStore = useSettingsStore();
 const windStore = useWindStore();
+const historyEditorStore = useHistoryEditorStore();
 
 let windString = ref("")
 let error = ref("")
@@ -21,16 +23,20 @@ let error = ref("")
 const handleKey = (ev) => {
     ev.preventDefault()
 
-    if(parseWindString(windString.value)){
-        windStore.addToHistory(parseWindString(windString.value))
+    let pair = parseWindString(windString.value)
+
+    if (pair) {
+
+        if (historyEditorStore.currentlyEditingIndex != null) {
+            historyEditorStore.currentlyEditingDirectionId = pair[0].id
+            historyEditorStore.currentlyEditingSpeedM_s = pair[1].m_s
+            historyEditorStore.save()
+        } else {
+            windStore.addToHistory(pair)
+        }
     }
 
     windString.value = ""
-}
-
-const handleTabPressed = () => {
-    console.log("test3")
-    this.$refs.textModeInput.focus()
 }
 
 const parseWindString = (str) => {
@@ -68,14 +74,18 @@ const parseWindString = (str) => {
         return null
     }
 
-    if (windStore.usedDirections.includes(directionObject) && directionObject.id !== "?") {
-        error.value = "Direction already used"
-        return null
-    }
+    if (historyEditorStore.currentlyEditingIndex == null){
 
-    if (windStore.usedSpeeds.includes(speedObject)) {
-        error.value = "Speed already used"
-        return null
+        if (windStore.usedDirections.includes(directionObject) && directionObject.id !== "?") {
+            error.value = "Direction already used"
+            return null
+        }
+
+        if (windStore.usedSpeeds.includes(speedObject)) {
+            error.value = "Speed already used"
+            return null
+        }
+
     }
 
     error.value = ""

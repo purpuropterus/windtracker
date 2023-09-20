@@ -32,11 +32,12 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             windStore.history[this.currentlyEditingIndex][0] = windStore.wind.directions.find(direction => direction.id === this.currentlyEditingDirectionId)
             windStore.history[this.currentlyEditingIndex][1] = windStore.wind.speeds.find(speed => speed.m_s === this.currentlyEditingSpeedM_s)
 
-            if(this.historyRunthrough()){
-                this.error = ""
-                this.currentlyEditingIndex = null
+            windStore.currentPair[0] = {}
+            windStore.currentPair[1] = {}
 
+            if(this.historyRunthrough()){
                 this.updateUsed()
+                this.close()
             }
         },
         historyRunthrough(){
@@ -86,6 +87,10 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
                 windStore.usedSpeeds.push(speed)
             }
         },
+        close(){
+            this.error = ""
+            this.currentlyEditingIndex = null
+        }
 
     }
 })

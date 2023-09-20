@@ -2,6 +2,11 @@
 
   <div class="app">
 
+    <!-- <p>currentlyEditingIndex: {{ historyEditorStore.currentlyEditingIndex }}</p>
+    <p>currentlyEditingDirectionId: {{ historyEditorStore.currentlyEditingDirectionId }}</p>
+    <p>currentlyEditingSpeedM_s: {{ historyEditorStore.currentlyEditingSpeedM_s }}</p>
+    <p>error: {{ historyEditorStore.error }}</p> -->
+
     <!-- <p>{{ windStore.history }}</p>
     <p>historyLength={{ windStore.historyLength }}</p>
     <p>usedDirections={{ windStore.usedDirections }}</p>
@@ -53,11 +58,13 @@ import HistoryEditor from '@/components/HistoryEditor.vue'
 
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from './stores/settingsStore';
+import { useHistoryEditorStore } from './stores/historyEditorStore';
 
 import { onMounted } from 'vue';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();
+const historyEditorStore = useHistoryEditorStore();
 
 </script>
 

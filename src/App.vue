@@ -2,12 +2,18 @@
 
   <div class="app">
 
-    <!-- <p>currentlyEditingIndex: {{ historyEditorStore.currentlyEditingIndex }}</p>
-    <p>currentlyEditingDirectionId: {{ historyEditorStore.currentlyEditingDirectionId }}</p>
-    <p>currentlyEditingSpeedM_s: {{ historyEditorStore.currentlyEditingSpeedM_s }}</p>
-    <p>error: {{ historyEditorStore.error }}</p> -->
+    <!-- <p>currentPair: {{ windStore.currentPair }}</p>
 
-    <!-- <p>{{ windStore.history }}</p>
+    <p>currentlyEditingIndex: {{ historyEditorStore.currentlyEditingIndex }}</p>
+
+    <p>currentlyEditingDirectionId: {{ historyEditorStore.currentlyEditingDirectionId }}</p>
+
+    <p>currentlyEditingSpeedM_s: {{ historyEditorStore.currentlyEditingSpeedM_s }}</p>
+    
+    <p>error: {{ historyEditorStore.error }}</p>
+
+    <p>history={{ windStore.history }}</p>
+
     <p>historyLength={{ windStore.historyLength }}</p>
     <p>usedDirections={{ windStore.usedDirections }}</p>
     <p>usedSpeeds={{ windStore.usedSpeeds }}</p>

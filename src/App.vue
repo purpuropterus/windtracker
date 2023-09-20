@@ -13,6 +13,7 @@
     <p>error: {{ historyEditorStore.error }}</p>
 
     <p>history={{ windStore.history }}</p>
+
     <p>historyLength={{ windStore.historyLength }}</p>
     <p>usedDirections={{ windStore.usedDirections }}</p>
     <p>usedSpeeds={{ windStore.usedSpeeds }}</p>
@@ -61,11 +62,13 @@ import HistoryEditor from '@/components/HistoryEditor.vue'
 
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from './stores/settingsStore';
+import { useHistoryEditorStore } from './stores/historyEditorStore';
 
 import { onMounted } from 'vue';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();
+const historyEditorStore = useHistoryEditorStore();
 
 </script>
 

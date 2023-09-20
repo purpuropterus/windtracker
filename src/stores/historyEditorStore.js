@@ -47,12 +47,12 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
 
             //only check the last group of 8
             const directionsNum = windStore.historyLength % 8
-            this.directionsToCheck = windStore.history.slice(-directionsNum).map(group => group[0]).filter(id => id !== "?")
+            this.directionsToCheck = windStore.history.slice(Math.floor(windStore.historyLength / 8) * 8, -(windStore.history.length - directionsNum)).map(group => group[0]).filter(id => id !== "?")
         
 
             //only check the last group of 9
             const speedsNum = windStore.historyLength % 9
-            this.speedsToCheck = windStore.history.slice(-speedsNum).map(group => group[1])
+            this.speedsToCheck = windStore.history.slice(Math.floor(windStore.historyLength / 9) * 9, -(windStore.history.length - speedsNum)).map(group => group[1])
 
             // check for duplicate directions
             for (const direction of this.directionsToCheck) {

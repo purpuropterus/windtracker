@@ -2,7 +2,7 @@
 
   <div class="app">
 
-    <!-- <p>currentPair: {{ windStore.currentPair }}</p>
+    <p>currentPair: {{ windStore.currentPair }}</p>
 
     <p>currentlyEditingIndex: {{ historyEditorStore.currentlyEditingIndex }}</p>
 
@@ -17,7 +17,7 @@
     <p>historyLength={{ windStore.historyLength }}</p>
     <p>usedDirections={{ windStore.usedDirections }}</p>
     <p>usedSpeeds={{ windStore.usedSpeeds }}</p>
-    <p>zeroDirection={{ windStore.zeroDirection }}</p> -->
+    <p>zeroDirection={{ windStore.zeroDirection }}</p>
 
 
     <div class="parent">

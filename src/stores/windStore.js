@@ -139,10 +139,10 @@ export const useWindStore = defineStore("wind", {
                     zeroDirection == null
                 }
 
-                let zeroLocation = this.history.indexOf(this.history.find(pair => pair[1] == zeroSpeed))
+                let zeroHole = this.history.indexOf(this.history.find(pair => pair[1] == zeroSpeed)) + 1
 
-                if ( ((zeroLocation != 7) && (this.history[zeroLocation+1][0] == zeroDirection) && (this.history[8][0] == zeroDirection)) 
-                || (pair[0] == zeroDirection && this.historyLength != zeroLocation+1 && this.historyLength != 9)) {
+                if ( ((zeroHole != 8) && (this.history[zeroHole][0] == zeroDirection) && (this.history[8][0] == zeroDirection)) 
+                || (pair[0] == zeroDirection && this.historyLength != zeroHole+1 && this.historyLength != 9)) {
                     throw new Error(`direction ${zeroDirection.id} must be on either hole ${zeroLocation + 2} or 9 (not both)`)
                 }
             }

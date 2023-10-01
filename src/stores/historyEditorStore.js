@@ -1,5 +1,4 @@
 import { defineStore } from "pinia"
-import { ref } from "vue"
 
 import { useWindStore } from "./windStore"
 import { useSettingsStore } from "./settingsStore"
@@ -35,15 +34,19 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             windStore.currentPair[0] = {}
             windStore.currentPair[1] = {}
 
-            if(this.historyRunthrough()){
+            if(this.validateHistory()){
                 this.updateUsed()
                 this.close()
             }
         },
-        historyRunthrough(){
+        validateHistory(){
             
             const windStore = useWindStore()
             const settingsStore = useSettingsStore()
+
+            if (settingsStore.game == "og") {
+                return this.validateOgHistory()
+            }
 
             //only check the last group of 8
             const directionsNum = windStore.historyLength % 8
@@ -73,18 +76,43 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             return true
 
         },
+        validateOgHistory(){
+            const windStore = useWindStore()
+            const settingsStore = useSettingsStore()
+
+            const windStoreCopy = windStore.$state
+            const historyWithoutEmptyPairs = windStoreCopy.history.filter(item => (item[0].id !== (null||undefined)) && (item[1].m_s !== (null||undefined)))
+
+            windStore.reset()
+
+            //don't include empty pairs
+            for (const pair in historyWithoutEmptyPairs) {
+                try {
+                    windStore.addToHistory(historyWithoutEmptyPairs[pair])
+                } catch (error) {
+                    this.error = error
+                    windStore.$state = windStoreCopy
+                    return false
+                }
+            } 
+
+            return true
+        },
         updateUsed(){
             const windStore = useWindStore()
+            const settingsStore = useSettingsStore()
 
-            windStore.usedDirections = []
-            windStore.usedSpeeds = []
+            if (settingsStore.game == "wsr") {
+                windStore.usedDirections = []
+                windStore.usedSpeeds = []
 
-            for (const direction of this.directionsToCheck) {
-                windStore.usedDirections.push(direction)
-            }
+                for (const direction of this.directionsToCheck) {
+                    windStore.usedDirections.push(direction)
+                }
 
-            for (const speed of this.speedsToCheck) {
-                windStore.usedSpeeds.push(speed)
+                for (const speed of this.speedsToCheck) {
+                    windStore.usedSpeeds.push(speed)
+                }
             }
         },
         close(){

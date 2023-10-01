@@ -75,7 +75,6 @@ export const useWindStore = defineStore("wind", {
         }
     },
     actions: {
-
         handleClick (ev, type, value) {
 
             const historyEditorStore = useHistoryEditorStore()
@@ -126,47 +125,19 @@ export const useWindStore = defineStore("wind", {
             //push it to history
             this.history[this.historyLength] = pair
 
-            let ignoreRepeatDirection = false
-
             if (this.doAfterZero) {
-                console.log('hi')
                 this.ogAfterZeroWindProcedure()
-                ignoreRepeatDirection = true
-            }
-
-            let zeroSpeed = this.wind.speeds.find(speed => speed.m_s == 0)
-            if (this.usedSpeeds.includes(zeroSpeed) && settingsStore.game == "og") {
-                
-                let zeroDirection = this.history.find(pair => pair[1] == zeroSpeed)[0]
-                if (zeroDirection.id == "?") {
-                    zeroDirection == null
-                }
-
-                let zeroHole = this.history.indexOf(this.history.find(pair => pair[1] == zeroSpeed)) + 1
-
-                if ( ((zeroHole != 8) && (this.history[zeroHole][0] == zeroDirection) && (this.history[8][0] == zeroDirection)) 
-                || (pair[0] == zeroDirection && this.historyLength != zeroHole+1 && this.historyLength != 9)) {
-                    throw new Error(`direction ${zeroDirection.id} must be on either hole ${zeroLocation + 2} or 9 (not both)`)
-                }
-            }
-
-            if (this.usedDirections.includes(pair[0]) && !ignoreRepeatDirection){
-                throw new Error(`direction ${pair[0].id} is already used`)
-            }
-
-            if (this.usedSpeeds.includes(pair[1])) {
-                throw new Error(`speed ${pair[1][settingsStore.speedUnit]} is already used`)
             }
 
             //push direction to used directions
-            if (!(pair[1].m_s === 0) || !(settingsStore.game === "og")) {
+            if (!(pair[1].m_s == 0) || !(settingsStore.game == "og")) {
                 if (pair[0].id != "?" && !this.usedDirections.includes(pair[0])) {
                     this.usedDirections.push(pair[0]);
                 }
             } else {
                 this.ogZeroWindProcedure()
             }
-
+            
             this.usedSpeeds.push(pair[1]);
 
             if (this.historyLength == 8 && settingsStore.game == "og") {
@@ -204,10 +175,6 @@ export const useWindStore = defineStore("wind", {
         ogZeroWindProcedure () {
             let zeroDirection = this.history[this.historyLength-1][0]
 
-            if (this.usedDirections.includes(zeroDirection)) {
-                throw new Error("0 direction cannot already be used")
-            }
-
             if (zeroDirection.id == "?") {
                 return
             }
@@ -235,7 +202,7 @@ export const useWindStore = defineStore("wind", {
 
             this.history[8][2] = {}
 
-            if (this.history[this.historyLength-1][0] == zeroDirection) {
+            if (this.currentPair[0] == zeroDirection) {
                 this.history[8][0] = {}
             }
 
@@ -250,6 +217,7 @@ export const useWindStore = defineStore("wind", {
             
             if (unusedDirection == undefined && this.zeroDirection == null) {
                 this.history[8][1] = zeroSpeed
+                this.history[8][0] = unknownDirection
             } else {
                 if (this.usedDirections.length == 7 && !this.historyContainsUnknown) {
                     if (unusedDirection){
@@ -268,8 +236,7 @@ export const useWindStore = defineStore("wind", {
             this.usedSpeeds = []
             this.currentPair = [ {}, {}, {} ]
             this.history = this.createEmptyHistory()
-            this.zeroDirection = null
-            this.doAfterZero = null
+
         },
         createEmptyHistory () {
             const settingsStore = useSettingsStore()

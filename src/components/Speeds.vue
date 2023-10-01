@@ -2,7 +2,7 @@
     <div class="speeds" ref="speedsRef">
 
         <div class="speeds-buttons" 
-            v-if="(windStore.historyLength != settingsStore.holes) || (historyEditorStore.currentlyEditingIndex != null)" 
+            v-if="!(windStore.historyLength==settingsStore.holes)" 
             :style="{gridTemplateColumns: settingsStore.game == 'og' ? 'repeat(16, 1fr)' : 'repeat(11, 1fr)'}"
         >
 

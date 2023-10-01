@@ -2,7 +2,7 @@
 
   <div class="directions" ref="directionsRef">
 
-    <div class="directions-buttons" v-if="(windStore.historyLength != settingsStore.holes) || (historyEditorStore.currentlyEditingIndex != null)">
+    <div class="directions-buttons" v-if="!(windStore.historyLength==settingsStore.holes)">
 
       <button
         v-for="direction in (historyEditorStore.currentlyEditingIndex != null ? directions : filteredDirections)"

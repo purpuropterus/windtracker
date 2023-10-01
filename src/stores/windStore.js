@@ -67,6 +67,9 @@ export const useWindStore = defineStore("wind", {
             //return amount of items in history where item[0] AND item[1] is not empty
             return this.history.filter(item => item[0] != {} && (item[1].m_s != (null||undefined))).length
         },
+        historyContainsUnknown () {
+            return this.history.filter(item => item[0].id == "?").length > 0
+        },
         wsrSpeeds () {
             return this.wind.speeds.filter(speed => !speed.ogOnly)
         }
@@ -143,7 +146,7 @@ export const useWindStore = defineStore("wind", {
 
                 if ( ((zeroHole != 8) && (this.history[zeroHole][0] == zeroDirection) && (this.history[8][0] == zeroDirection)) 
                 || (pair[0] == zeroDirection && this.historyLength != zeroHole+1 && this.historyLength != 9)) {
-                    throw new Error(`direction ${zeroDirection.id} must be on either hole ${zeroLocation + 2} or 9 (not both)`)
+                    throw new Error(`direction ${zeroDirection.id} must be on either hole ${zeroHole + 1} or 9 (not both)`)
                 }
             }
 
@@ -243,13 +246,12 @@ export const useWindStore = defineStore("wind", {
             const zeroSpeed = this.wind.speeds.find(speed => speed.m_s == 0)
             const unusedDirection = this.wind.directions.find(direction => !this.usedDirections.includes(direction) && direction.id != "?")
 
-            console.log(`unusedDirection: ${JSON.stringify(unusedDirection)}`)
             const unknownDirection = this.wind.directions.find(direction => direction.id == "?")
             
             if (unusedDirection == undefined && this.zeroDirection == null) {
                 this.history[8][1] = zeroSpeed
             } else {
-                if (this.usedDirections.length == 7) {
+                if (this.usedDirections.length == 7 && !this.historyContainsUnknown) {
                     if (unusedDirection){
                         this.history[8][0] = unusedDirection
                     }

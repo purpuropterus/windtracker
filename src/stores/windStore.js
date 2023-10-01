@@ -146,7 +146,7 @@ export const useWindStore = defineStore("wind", {
 
                 if ( ((zeroHole != 8) && (this.history[zeroHole][0] == zeroDirection) && (this.history[8][0] == zeroDirection)) 
                 || (pair[0] == zeroDirection && this.historyLength != zeroHole+1 && this.historyLength != 9)) {
-                    throw new Error(`direction ${zeroDirection.id} must be on either hole ${zeroHole + 1} or 9 (not both)`)
+                    throw new Error(`direction ${zeroDirection.id} must be on either hole ${zeroLocation + 2} or 9 (not both)`)
                 }
             }
 

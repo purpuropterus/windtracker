@@ -2,9 +2,9 @@
 
     <div class="history-editor" v-if="historyEditorStore.currentlyEditingIndex != null">
 
-        <h3>Edit Hole {{ historyEditorStore.currentlyEditingIndex + 1 }}</h3>
+        <h1>Editing Hole {{ historyEditorStore.currentlyEditingIndex + 1 }}</h1>
 
-        <div class="direction-select">
+        <!-- <div class="direction-select">
             <label>Direction: </label>
 
             <select name="direction" v-model="historyEditorStore.currentlyEditingDirectionId">
@@ -24,13 +24,12 @@
                 :key="speed.m_s"
             >{{ speed[settingsStore.speedUnit] }}</option>
             </select>
-        </div>
+        </div> -->
 
-        <button class="save" @click="historyEditorStore.save()">Save</button>
+        <button class="close" v-if="!historyEditorStore.error" @click="historyEditorStore.close()">Close</button>
 
         <div class="error" v-if="historyEditorStore.error">
             <p>{{ historyEditorStore.error }}</p>
-            <p>Available winds will not update until error is resolved</p>
         </div>
 
     </div>
@@ -41,12 +40,8 @@
 
 <script setup>
 
-import { useWindStore } from '@/stores/windStore';
-import { useSettingsStore } from '@/stores/settingsStore';
 import { useHistoryEditorStore } from '@/stores/historyEditorStore';
 
-const windStore = useWindStore();
-const settingsStore = useSettingsStore(); 
 const historyEditorStore = useHistoryEditorStore();
 
 </script>
@@ -58,7 +53,7 @@ const historyEditorStore = useHistoryEditorStore();
     color:red;
 }
 
-.save {
+.close {
     font-size: 1.3vw;
 }
 

@@ -7,7 +7,7 @@
         >
 
             <button 
-                v-for="speed in filteredSpeeds" 
+                v-for="speed in (historyEditorStore.currentlyEditingIndex != null ? speeds : filteredSpeeds)" 
                 @click="windStore.handleClick($event, 'speed', speed)" 
                 class="speeds-item"
                 :class="{ highlighted: speed.m_s == windStore.currentPair[1].m_s }" 
@@ -28,6 +28,7 @@ import { computed } from 'vue'
 
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useWindStore } from '@/stores/windStore'
+import { useHistoryEditorStore } from '@/stores/historyEditorStore'
 
 const props = defineProps({
     speeds: Array
@@ -35,6 +36,7 @@ const props = defineProps({
 
 const settingsStore = useSettingsStore()
 const windStore = useWindStore();
+const historyEditorStore = useHistoryEditorStore();
 
 const filteredSpeeds = computed(() => {
     return props.speeds.filter((speed) => !windStore.usedSpeeds.includes(speed));

@@ -10,7 +10,6 @@ import swImage from "@/assets/sw.png"
 import wImage from "@/assets/w.png"
 import unknownImage from "@/assets/unknown.png"
 import { useSettingsStore } from "./settingsStore"
-import { useHistoryEditorStore } from "./historyEditorStore"
 
 
 export const useWindStore = defineStore("wind", {
@@ -77,26 +76,16 @@ export const useWindStore = defineStore("wind", {
     actions: {
 
         handleClick (ev, type, value) {
-
-            const historyEditorStore = useHistoryEditorStore()
             
             switch (type) {
                 case "direction":
             
-                    if (historyEditorStore.currentlyEditingIndex !== null) {
-                        historyEditorStore.currentlyEditingDirectionId = value.id
-                    }
-                    
                     this.currentPair[0] = value
                     
                     break
             
                 case "speed":
                         
-                    if (historyEditorStore.currentlyEditingIndex !== null) {
-                        historyEditorStore.currentlyEditingSpeedM_s = value.m_s
-                    } 
-
                     this.currentPair[1] = value
             
                     break
@@ -105,11 +94,8 @@ export const useWindStore = defineStore("wind", {
 
             if (this.currentPair[0]?.id && this.currentPair[1]?.m_s !== undefined) {
 
-                if (historyEditorStore.currentlyEditingIndex !== null) {
-                    historyEditorStore.save()
-                    return
-                }
 
+                console.log(JSON.stringify(this.currentPair))
                 this.addToHistory(this.currentPair)
 
             }

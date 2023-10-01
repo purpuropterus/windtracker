@@ -5,7 +5,7 @@
     <div class="directions-buttons" v-if="(windStore.historyLength != settingsStore.holes) || (historyEditorStore.currentlyEditingIndex != null)">
 
       <button
-        v-for="direction in (historyEditorStore.currentlyEditingIndex != null ? directions : filteredDirections)"
+        v-for="direction in filteredDirections"
         :key="direction.id"
         @click="windStore.handleClick($event, 'direction', direction)"
         class="directions-item"
@@ -27,7 +27,6 @@
 <script setup>
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from '@/stores/settingsStore';
-import { useHistoryEditorStore } from '@/stores/historyEditorStore';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -36,7 +35,6 @@ const props = defineProps({
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();
-const historyEditorStore = useHistoryEditorStore();
 
 const filteredDirections = computed(() => {
 

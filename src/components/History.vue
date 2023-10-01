@@ -22,7 +22,7 @@
 
           </div>
           <img :src="Object.keys(item[0]).length ? item[0].img : emptyImage" :alt="item[0].id" />
-          <div class="index-container" :style="{backgroundColor: historyEditorStore.currentlyEditingIndex == index ? 'green' : 'black' }">
+          <div class="index-container">
             <p class="history-item-index">{{ index + 1 }}</p>
           </div>
           <p v-if="item[2].text" class="history-item-id">{{ item[2].text }}</p>
@@ -83,6 +83,7 @@ windStore.history = windStore.createEmptyHistory()
 }
 
 .index-container {
+  background-color: black;
   position: absolute;
   top: 0;
   left: 0;

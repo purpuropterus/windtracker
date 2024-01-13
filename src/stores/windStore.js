@@ -230,10 +230,20 @@ export const useWindStore = defineStore("wind", {
 
         },
         reset () {
+
+            const historyEditorStore = useHistoryEditorStore()
+
             this.usedDirections = []
             this.usedSpeeds = []
             this.currentPair = [ {}, {}, {} ]
             this.history = this.createEmptyHistory()
+
+            historyEditorStore.currentlyEditingIndex = null
+            historyEditorStore.currentlyEditingDirectionId = null
+            historyEditorStore.currentlyEditingSpeedM_s = null
+            historyEditorStore.error = null
+
+            
 
         },
         createEmptyHistory () {

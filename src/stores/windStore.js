@@ -129,7 +129,6 @@ export const useWindStore = defineStore("wind", {
             let ignoreRepeatDirection = false
 
             if (this.doAfterZero) {
-                console.log('hi')
                 this.ogAfterZeroWindProcedure()
                 ignoreRepeatDirection = true
             }
@@ -263,13 +262,19 @@ export const useWindStore = defineStore("wind", {
             }
 
         },
-        reset () {
+        reset (resetEditor = true) {
+            const historyEditorStore = useHistoryEditorStore()
+
             this.usedDirections = []
             this.usedSpeeds = []
             this.currentPair = [ {}, {}, {} ]
             this.history = this.createEmptyHistory()
             this.zeroDirection = null
             this.doAfterZero = null
+
+            if (resetEditor) {
+                historyEditorStore.close()
+            }
         },
         createEmptyHistory () {
             const settingsStore = useSettingsStore()

@@ -49,13 +49,18 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             }
 
             //only check the last group of 8
+
             const directionsNum = windStore.historyLength % 8
-            this.directionsToCheck = windStore.history.slice(Math.floor(windStore.historyLength / 8) * 8, -(windStore.history.length - directionsNum)).map(group => group[0]).filter(id => id !== "?")
-        
+            const directionsStartIndex = Math.floor(windStore.historyLength / 8) * 8 // beginning of group of 8 we're in
+
+            this.directionsToCheck = windStore.history.slice(directionsStartIndex, directionsStartIndex + directionsNum).map(group => group[0]).filter(id => id !== "?")
+    
 
             //only check the last group of 9
             const speedsNum = windStore.historyLength % 9
-            this.speedsToCheck = windStore.history.slice(Math.floor(windStore.historyLength / 9) * 9, -(windStore.history.length - speedsNum)).map(group => group[1])
+            const speedsStartIndex = Math.floor(windStore.historyLength / 9) * 9 // beginning of group of 9 we're in
+
+            this.speedsToCheck = windStore.history.slice(directionsStartIndex, directionsStartIndex + directionsNum).map(group => group[1])
 
             // check for duplicate directions
             for (const direction of this.directionsToCheck) {
@@ -78,35 +83,46 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
         },
         validateOgHistory(){
             const windStore = useWindStore()
-            const settingsStore = useSettingsStore()
 
             const windStoreCopy = windStore.$state
-            const historyWithoutEmptyPairs = windStoreCopy.history.filter(item => (item[0].id !== (null||undefined)) && (item[1].m_s !== (null||undefined)))
+            const historyWithoutEmptyPairs = windStoreCopy.history.filter(item => (
+                item[0].id !== (null||undefined)) && (item[1].m_s !== (null||undefined))
+            )
 
-            windStore.reset()
+            windStore.reset(false)
+
+            let foundNoError = true
 
             //don't include empty pairs
             for (const pair in historyWithoutEmptyPairs) {
                 try {
                     windStore.addToHistory(historyWithoutEmptyPairs[pair])
                 } catch (error) {
+                    console.log(error)
                     this.error = error
-                    windStore.$state = windStoreCopy
-                    return false
+                    foundNoError = false
                 }
             } 
 
-            return true
+            if (!foundNoError) {
+                windStore.$state = windStoreCopy
+            }
+
+            return foundNoError
         },
         updateUsed(){
             const windStore = useWindStore()
             const settingsStore = useSettingsStore()
 
             if (settingsStore.game == "wsr") {
+
+                console.log('we are playing wsr')
+
                 windStore.usedDirections = []
                 windStore.usedSpeeds = []
 
                 for (const direction of this.directionsToCheck) {
+                    console.log(direction)
                     windStore.usedDirections.push(direction)
                 }
 
@@ -118,6 +134,8 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
         close(){
             this.error = ""
             this.currentlyEditingIndex = null
+            this.currentlyEditingDirectionId = null
+            this.currentlyEditingSpeedM_s = null
         }
 
     }

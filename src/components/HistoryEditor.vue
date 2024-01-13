@@ -1,6 +1,6 @@
 <template>  
 
-    <div class="history-editor" v-if="historyEditorStore.currentlyEditingIndex != null">
+    <div class="history-editor" v-if="historyEditorStore.currentlyEditingIndex !== null">
 
         <h1>Editing Hole {{ historyEditorStore.currentlyEditingIndex + 1 }}</h1>
 

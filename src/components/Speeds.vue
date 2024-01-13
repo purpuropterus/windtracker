@@ -67,11 +67,12 @@ const filteredSpeeds = computed(() => {
     font-weight: bold;
     font-size: 2vw;
     color: white;
+    border: 0px solid;
 }
 
 .highlighted {
-border-radius: 4px;
-border-color: green
+    border: 2px solid;
+    border-color: green
 }   
 
 </style>

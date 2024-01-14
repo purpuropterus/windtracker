@@ -46,19 +46,23 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             const windStore = useWindStore()
             const settingsStore = useSettingsStore()
 
+            if (settingsStore.game == "og") {
+                return this.validateOgHistory()
+            }
+
             //only check the last group of 8
 
             const directionsNum = windStore.historyLength % 8
             const directionsStartIndex = Math.floor(windStore.historyLength / 8) * 8 // beginning of group of 8 we're in
 
-            this.directionsToCheck = windStore.history.slice(directionsStartIndex, directionsStartIndex + directionsNum).map(group => group[0]).filter(id => id !== "?")
+            this.directionsToCheck = windStore.history.slice(directionsStartIndex, directionsStartIndex + directionsNum).map(pair => pair[0]).filter(direction => direction.id !== "?")
     
 
             //only check the last group of 9
             const speedsNum = windStore.historyLength % 9
             const speedsStartIndex = Math.floor(windStore.historyLength / 9) * 9 // beginning of group of 9 we're in
 
-            this.speedsToCheck = windStore.history.slice(directionsStartIndex, directionsStartIndex + directionsNum).map(group => group[1])
+            this.speedsToCheck = windStore.history.slice(directionsStartIndex, directionsStartIndex + directionsNum).map(pair => pair[1])
 
             // check for duplicate directions
             for (const direction of this.directionsToCheck) {
@@ -109,7 +113,7 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             const windStore = useWindStore()
             const settingsStore = useSettingsStore()
 
-            if (settingsStore.game == "wsr") {
+            if (settingsStore.game === "wsr") {
 
                 windStore.usedDirections = []
                 windStore.usedSpeeds = []

@@ -107,6 +107,7 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
 
         updateUsed(){
             const windStore = useWindStore()
+            const settingsStore = useSettingsStore()
 
             if (settingsStore.game == "wsr") {
 

@@ -229,7 +229,8 @@ export const useWindStore = defineStore("wind", {
             }
 
         },
-        reset () {
+      
+        reset (resetEditor = true) {
 
             const historyEditorStore = useHistoryEditorStore()
 
@@ -237,6 +238,12 @@ export const useWindStore = defineStore("wind", {
             this.usedSpeeds = []
             this.currentPair = [ {}, {}, {} ]
             this.history = this.createEmptyHistory()
+            this.zeroDirection = null
+            this.doAfterZero = null
+
+            if (resetEditor) {
+                historyEditorStore.close()
+            }
 
             historyEditorStore.currentlyEditingIndex = null
             historyEditorStore.currentlyEditingDirectionId = null

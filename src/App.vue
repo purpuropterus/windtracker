@@ -19,7 +19,6 @@
     <p>usedSpeeds={{ windStore.usedSpeeds }}</p>
     <p>zeroDirection={{ windStore.zeroDirection }}</p> -->
 
-
     <div class="parent">
 
         <div class="top">

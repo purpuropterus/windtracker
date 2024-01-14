@@ -17,7 +17,15 @@
         :key="item.id"
       >
 
-        <div class="history-item-image" @click="(Object.keys(item[0]).length && Object.keys(item[1]).length) ? historyEditorStore.handleHistoryClick(index) : null" :style="{backgroundColor: Object.keys(item[0]).length!=0?(item[1].color?item[1].color:'black'):'white'}">
+        <div class="history-item-image" 
+          @click="(Object.keys(item[0]).length && Object.keys(item[1]).length) ? historyEditorStore.handleHistoryClick(index) : null" 
+          :style="{
+            backgroundColor: JSON.stringify(item) !== JSON.stringify([{},{},{}]) // to get === [{},{},{}] to work
+              ? (item[1].color ? item[1].color : 'black')
+              : 'white'
+          }" 
+        >
+
           <div class="bg-div">
 
           </div>

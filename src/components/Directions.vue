@@ -2,10 +2,10 @@
 
   <div class="directions" ref="directionsRef">
 
-    <div class="directions-buttons" v-if="(windStore.historyLength != settingsStore.holes) || (historyEditorStore.currentlyEditingIndex != null)">
+    <div class="directions-buttons" v-if="(windStore.historyLength !== settingsStore.holes) || (historyEditorStore.currentlyEditingIndex !== null)">
 
       <button
-        v-for="direction in (historyEditorStore.currentlyEditingIndex != null ? directions : filteredDirections)"
+        v-for="direction in (historyEditorStore.currentlyEditingIndex !== null ? directions : filteredDirections)"
         :key="direction.id"
         @click="windStore.handleClick($event, 'direction', direction)"
         class="directions-item"

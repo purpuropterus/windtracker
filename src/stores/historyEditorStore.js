@@ -6,6 +6,7 @@ import { useSettingsStore } from "./settingsStore"
 export const useHistoryEditorStore = defineStore("historyEditor", {
     state: () => {
         return {
+
             currentlyEditingIndex: null,
             currentlyEditingDirectionId: null,
             currentlyEditingSpeedM_s: null,
@@ -19,7 +20,7 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
     actions: {
         handleHistoryClick(index){
             const windStore = useWindStore()
-
+            
             this.currentlyEditingIndex = index
             this.currentlyEditingDirectionId = windStore.history[index][0].id
             this.currentlyEditingSpeedM_s = windStore.history[index][1].m_s
@@ -84,8 +85,7 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
         validateOgHistory(){
             const windStore = useWindStore()
 
-            const windStoreCopy = windStore.$state
-            const historyWithoutEmptyPairs = windStoreCopy.history.filter(item => (
+            const historyWithoutEmptyPairs = windStore.history.filter(item => (
                 item[0].id !== (null||undefined)) && (item[1].m_s !== (null||undefined))
             )
 
@@ -102,10 +102,6 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
                     this.error = error
                     foundNoError = false
                 }
-            } 
-
-            if (!foundNoError) {
-                windStore.$state = windStoreCopy
             }
 
             return foundNoError
@@ -132,11 +128,13 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             }
         },
         close(){
+
             this.error = ""
             this.currentlyEditingIndex = null
             this.currentlyEditingDirectionId = null
             this.currentlyEditingSpeedM_s = null
-        }
+
+        },
 
     }
 })

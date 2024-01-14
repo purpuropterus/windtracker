@@ -115,8 +115,11 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
                 windStore.usedSpeeds = []
 
                 for (const direction of this.directionsToCheck) {
-                    console.log(direction)
                     windStore.usedDirections.push(direction)
+                }
+
+                for (const speed of this.speedsToCheck) {
+                    windStore.usedSpeeds.push(speed)
                 }
             }
         },

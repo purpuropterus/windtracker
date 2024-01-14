@@ -9,8 +9,15 @@
         :key="direction.id"
         @click="windStore.handleClick($event, 'direction', direction)"
         class="directions-item"
-        :class="{ highlighted: direction.id === windStore.currentPair[0].id }"
+        :class="{ 
+          highlighted: direction.id === windStore.currentPair[0].id,
+          unknown: direction.id === '?'
+        }"
       >
+        <div 
+          class="color-overlay"
+          v-if="direction.id === '?'"
+        />
         <div class="image-container">
           <img class="direction-img" draggable="false" :src="direction.img" :alt="direction.id" />
           <div class="text-overlay">
@@ -60,7 +67,8 @@ const filteredDirections = computed(() => {
 
 .directions-item {
   position: relative;
-  background-color: black
+  background-color: black;
+  border: none;
 }
 
 .directions-item img {
@@ -89,7 +97,24 @@ const filteredDirections = computed(() => {
 }
 
 .highlighted {
+  border: 2px solid;
   border-radius: 4px;
   border-color: green;
 }
+
+.highlighted.unknown {
+  border-color: #FFDD82;
+}
+
+.color-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .9;
+  background-color: #FFAE42;
+  z-index: 5;
+}
+
 </style>

@@ -2,7 +2,7 @@
     <div class="speeds" ref="speedsRef">
 
         <div class="speeds-buttons" 
-            v-if="(windStore.historyLength != settingsStore.holes) || (historyEditorStore.currentlyEditingIndex != null)" 
+            v-if="!(windStore.historyLength==settingsStore.holes)" 
             :style="{gridTemplateColumns: settingsStore.game == 'og' ? 'repeat(16, 1fr)' : 'repeat(11, 1fr)'}"
         >
 
@@ -67,11 +67,12 @@ const filteredSpeeds = computed(() => {
     font-weight: bold;
     font-size: 2vw;
     color: white;
+    border: 0px solid;
 }
 
 .highlighted {
-border-radius: 4px;
-border-color: green
+    border: 2px solid;
+    border-color: green
 }   
 
 </style>

@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import { ref } from "vue"
 
 import { useWindStore } from "./windStore"
 import { useSettingsStore } from "./settingsStore"
@@ -35,19 +36,15 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             windStore.currentPair[0] = {}
             windStore.currentPair[1] = {}
 
-            if(this.validateHistory()){
+            if(this.historyRunthrough()){
                 this.updateUsed()
                 this.close()
             }
         },
-        validateHistory(){
+        historyRunthrough(){
             
             const windStore = useWindStore()
             const settingsStore = useSettingsStore()
-
-            if (settingsStore.game == "og") {
-                return this.validateOgHistory()
-            }
 
             //only check the last group of 8
 
@@ -82,6 +79,7 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             return true
 
         },
+      
         validateOgHistory(){
             const windStore = useWindStore()
 
@@ -106,13 +104,11 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
 
             return foundNoError
         },
+
         updateUsed(){
             const windStore = useWindStore()
-            const settingsStore = useSettingsStore()
 
             if (settingsStore.game == "wsr") {
-
-                console.log('we are playing wsr')
 
                 windStore.usedDirections = []
                 windStore.usedSpeeds = []
@@ -121,12 +117,9 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
                     console.log(direction)
                     windStore.usedDirections.push(direction)
                 }
-
-                for (const speed of this.speedsToCheck) {
-                    windStore.usedSpeeds.push(speed)
-                }
             }
         },
+      
         close(){
 
             this.error = ""

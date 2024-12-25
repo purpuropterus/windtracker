@@ -12,7 +12,7 @@
     
     <p>error: {{ historyEditorStore.error }}</p>
 
-    <p>history={{ windStore.history }}</p>
+    <p>history={{ windStore.history }}</p>  
 
     <p>historyLength={{ windStore.historyLength }}</p>
     <p>usedDirections={{ windStore.usedDirections }}</p>

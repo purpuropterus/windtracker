@@ -23,10 +23,8 @@ onUnmounted(() => {
 const handleKeyPress = (ev) => {
 
   // checking for inputs inside .settings divs
-
-  const composedPath = ev.composedPath();
-
-  const isInsideSettings = composedPath.some((element) =>
+  
+  const isInsideSettings = ev.composedPath().some((element) =>
     element.classList?.contains('settings')
   );
 

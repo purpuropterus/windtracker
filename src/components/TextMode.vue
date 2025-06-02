@@ -23,46 +23,84 @@ let error = ref("")
 const handleKey = (ev) => {
     ev.preventDefault()
 
-    let pair = parseWindString(windString.value)
+    let parsed = parse(windString.value);
 
-    if (pair) {
+    // if direction is "D", that means edit
 
-        if (historyEditorStore.currentlyEditingIndex != null) {
-            historyEditorStore.currentlyEditingDirectionId = pair[0].id
-            historyEditorStore.currentlyEditingSpeedM_s = pair[1].m_s
-            historyEditorStore.save()
-        } else {
-            windStore.addToHistory(pair)
+    if (parsed[0] === "D") {
+
+        // make sure the second part falls in the number of holes
+        if (parsed[1] > settingsStore.holes || parsed[1] < 1) {
+            error.value = "Invalid hole number"
+            return;
         }
+
+        // make sure the hole we are trying to edit is filled
+        if (parsed[1] > windStore.historyLength) {
+            error.value = `Hole ${parsed[1]} is empty`
+            return;
+        }
+
+        // interpret the speed as a hole to edit
+        historyEditorStore.currentlyEditingIndex = parsed[1] - 1;
+
+        historyEditorStore.currentlyEditingDirectionId = windStore.history[historyEditorStore.currentlyEditingIndex][0].id;
+        historyEditorStore.currentlyEditingSpeedM_s = windStore.history[historyEditorStore.currentlyEditingIndex][1].m_s;
+
+        // clear textbox
+        windString.value = ""
+
+        return;
     }
 
+    // else we are either editing currently, or adding a new entry
+
+    // convert the parsed values into a pair of [direction, speed],
+    // and validate it along the way
+
+    const pair = validateParsed(parsed);
+
+    // return null means it wasn't valid
+    if (pair == null) {
+        return;
+    }
+
+    // if we are currently editing, update the existing entry
+    if (historyEditorStore.currentlyEditingIndex != null) {
+        historyEditorStore.currentlyEditingDirectionId = pair[0].id
+        historyEditorStore.currentlyEditingSpeedM_s = pair[1].m_s
+        historyEditorStore.save()
+    } 
+    // else, we are adding a new entry
+    else {
+        // don't allow adding new if the history is full
+        if (windStore.historyLength == settingsStore.holes) {
+            error.value = "History is full";
+            return;
+        }
+        windStore.addToHistory(pair)
+    }
+
+    // clear textbox
     windString.value = ""
 }
 
-const parseWindString = (str) => {
-    
-    if (windStore.historyLength == settingsStore.holes) {
-        error.value = "History is full"
-        return null
-    }
+const parse = (str) => {
+    // return an array of [direction, speed]
 
-    const speedUnit = settingsStore.speedUnit;
+    const direction = str.match(/[A-Za-z?/]+/) ? str.match(/[A-Za-z?/]+/)[0].toUpperCase() : "";
 
-    const matchResult = str.match(/\d+/);
-    const speedValue = matchResult ? parseInt(matchResult[0], 10) : 0;
+    const speedMatch = str.match(/\d+/);
+    const speed = speedMatch ? parseInt(speedMatch[0], 10) : 999;
 
-    let direction = null
+    return [direction, speed];
+}
 
-    const directionMatch = str.match(/[A-Za-z?/]+/);
-    if (directionMatch) {
-        direction = directionMatch[0].toUpperCase();
-        if (direction === "?" || direction === "/") {
-            direction = "?"; 
-        }
-    }
+const validateParsed = (parsed) => {
+    // return a pair of [direction, speed, {}]
 
-    const directionObject = windStore.wind.directions.find((dir) => dir.id === direction);
-    const speedObject = windStore.wind.speeds.find((spd) => spd[speedUnit] === speedValue);
+    const directionObject = windStore.wind.directions.find((dir) => dir.id === parsed[0]);
+    const speedObject = windStore.wind.speeds.find((spd) => spd[settingsStore.speedUnit] === parsed[1]);
 
     if (!directionObject) {
         error.value = "Invalid direction"
@@ -88,12 +126,9 @@ const parseWindString = (str) => {
 
     }
 
-    error.value = ""
-
-    windStore.currentPair = [ directionObject, speedObject, {} ];
-    return [ directionObject, speedObject, {} ];
-
+    return [directionObject, speedObject, {}];
 }
+
 
 
 </script>

@@ -6,7 +6,7 @@
     <!-- <p>{{ windStore.history }}</p> -->
     <div class="history"
       :style="{
-        gridTemplateColumns: settingsStore.game == 'og' ? 'repeat(9, 1fr)' : 'repeat(18, 1fr)'
+        gridTemplateColumns: 'og' ? `repeat(${settingsStore.holes}, 1fr)` : 'repeat(18, 1fr)'
       }"
     >
 

@@ -25,8 +25,6 @@ const handleKey = (ev) => {
 
     let parsed = parse(windString.value);
 
-    console.log(parsed);
-
     // if direction is "D", that means edit
 
     if (parsed[0] === "D") {

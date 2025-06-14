@@ -3,18 +3,19 @@
 
         <div class="speeds-buttons" 
             v-if="!(windStore.historyLength==settingsStore.holes)" 
-            :style="{gridTemplateColumns: settingsStore.game == 'og' ? 'repeat(16, 1fr)' : 'repeat(11, 1fr)'}"
+            :style="{gridTemplateColumns: settingsStore.game == 'og' ? 'repeat(17, 1fr)' : 'repeat(12, 1fr)'}"
         >
 
             <button 
                 v-for="speed in (historyEditorStore.currentlyEditingIndex != null ? speeds : filteredSpeeds)" 
                 @click="windStore.handleClick($event, 'speed', speed)" 
                 class="speeds-item"
-                :class="{ highlighted: speed.m_s == windStore.currentPair[1].m_s }" 
+                :class="{ highlighted: speed.m_s == windStore.currentPair[1].m_s, unknown: speed.m_s === 17 }" 
                 :key="speed.m_s"
                 :style="{ backgroundColor: speed.color }"
             >
-                {{ speed[settingsStore.speedUnit] }}
+                <div class="color-overlay" v-if="speed.m_s === 17" />
+                {{ speed.m_s === 17 ? '?' : speed[settingsStore.speedUnit] }}
             </button>
 
         </div>
@@ -68,11 +69,27 @@ const filteredSpeeds = computed(() => {
     font-size: 2vw;
     color: white;
     border: 0px solid;
+    position: relative;
 }
 
 .highlighted {
     border: 2px solid;
     border-color: green
 }   
+
+.highlighted.unknown {
+  border-color: #FFDD82;
+}
+
+.color-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .9;
+  background-color: #FFAE42;
+  z-index: 5;
+}
 
 </style>

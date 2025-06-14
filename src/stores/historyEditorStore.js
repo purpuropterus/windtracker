@@ -80,7 +80,8 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
                     directionsStartIndex,
                     directionsStartIndex + directionsNum
                 )
-                .map((pair) => pair[1]);
+                .map((pair) => pair[1])
+                .filter((speed) => speed.m_s !== 17);
 
             // check for duplicate directions
             for (const direction of this.directionsToCheck) {

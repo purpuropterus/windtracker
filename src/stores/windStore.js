@@ -36,7 +36,7 @@ export const useWindStore = defineStore("wind", {
                     { m_s: 5, mph: 10, color: "#6a6cff" },
                     { m_s: 6, mph: 12, color: "#7964ff" },
                     { m_s: 7, mph: 14, color: "#8f53e8" },
-                    { m_s: 8, mph: 16, color: "#a648b9" },
+                    { m_s: 8, mph: 17, color: "#a648b9" },
                     { m_s: 9, mph: 18, color: "#c53c9d" },
                     { m_s: 10, mph: 20, color: "#c43584" },
                     { m_s: 11, mph: 22, color: "#c22d6b", ogOnly: true },
@@ -44,6 +44,7 @@ export const useWindStore = defineStore("wind", {
                     { m_s: 13, mph: 26, color: "#c11b3a", ogOnly: true },
                     { m_s: 14, mph: 28, color: "#c11323", ogOnly: true },
                     { m_s: 15, mph: 30, color: "#c10c0c", ogOnly: true },
+                    { m_s: 17, mph: 32, color: "#000000" },
                 ],
             },
 
@@ -131,7 +132,10 @@ export const useWindStore = defineStore("wind", {
                 this.ogZeroWindProcedure();
             }
 
-            this.usedSpeeds.push(pair[1]);
+            // push speed to used speeds if not unknown
+            if (pair[1].m_s !== 17) {
+                this.usedSpeeds.push(pair[1]);
+            }
 
             if (this.historyLength == 8 && settingsStore.game == "og") {
                 this.ogHole8Procedure();
@@ -171,7 +175,7 @@ export const useWindStore = defineStore("wind", {
                 this.usedDirections = [];
             }
 
-            if (this.usedSpeeds.length == 9) {
+            if (this.historyLength % 9 === 0) {
                 this.usedSpeeds = [];
             }
         },
@@ -190,10 +194,10 @@ export const useWindStore = defineStore("wind", {
             this.history[this.historyLength][0] = zeroDirection;
             this.history[
                 this.historyLength
-            ][2].text = `${zeroDirection.id}: 9/16`;
+            ][2].text = `${zeroDirection.id}: 9/17`;
 
             this.history[8][0] = zeroDirection;
-            this.history[8][2].text = `${zeroDirection.id}: 7/16`;
+            this.history[8][2].text = `${zeroDirection.id}: 7/17`;
 
             this.zeroDirection = zeroDirection;
 

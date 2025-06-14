@@ -34,7 +34,7 @@
             <p class="history-item-index">{{ index + 1 }}</p>
           </div>
           <p v-if="item[2].text" class="history-item-id">{{ item[2].text }}</p>
-          <p v-else class="history-item-id">{{ item[1][settingsStore.speedUnit] }}{{ item[0]["id"] }}</p>
+          <p v-else class="history-item-id">{{ item[1].m_s === 17 ? '' : item[1][settingsStore.speedUnit] }}{{ item[0]["id"] }}</p>
         </div>
       </div>
     </div>

@@ -25,6 +25,8 @@ const handleKey = (ev) => {
 
     let parsed = parse(windString.value);
 
+    console.log(parsed);
+
     // if direction is "D", that means edit
 
     if (parsed[0] === "D") {
@@ -50,6 +52,9 @@ const handleKey = (ev) => {
         // clear textbox
         windString.value = ""
 
+        // clear error
+        error.value = ""
+
         return;
     }
 
@@ -61,7 +66,7 @@ const handleKey = (ev) => {
     const pair = validateParsed(parsed);
 
     // return null means it wasn't valid
-    if (pair == null) {
+    if (pair === null) {
         return;
     }
 
@@ -83,12 +88,25 @@ const handleKey = (ev) => {
 
     // clear textbox
     windString.value = ""
+    
+    // clear error
+    error.value = ""
 }
 
 const parse = (str) => {
     // return an array of [direction, speed]
 
-    const direction = str.match(/[A-Za-z?/]+/) ? str.match(/[A-Za-z?/]+/)[0].toUpperCase() : "";
+    const direction = str.match(/[A-Za-z?/]+/) ? str.match(/[A-Za-z?/]+/)[0].toUpperCase().replace(/\//g, "?") : "";
+
+    // special case for "??" which means unknown direction and speed
+    if (direction === "??") {
+        return ["?", 17]; 
+    }
+
+    // if direction contains ONE "?" and other letters, it also means unknown speed
+    if (direction.includes("?") && direction.length > 1) {
+        return [direction.replace(/\?/g, ""), 17];
+    }
 
     const speedMatch = str.match(/\d+/);
     const speed = speedMatch ? parseInt(speedMatch[0], 10) : 999;

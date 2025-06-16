@@ -3,6 +3,7 @@ import { ref } from "vue";
 
 import { useWindStore } from "./windStore";
 import { useSettingsStore } from "./settingsStore";
+import { useGoldfishStore } from "./goldfishStore";
 
 export const useHistoryEditorStore = defineStore("historyEditor", {
     state: () => {
@@ -44,6 +45,8 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             if (this.historyRunthrough()) {
                 this.updateUsed();
                 this.close();
+
+                useGoldfishStore().findSeed();
             }
         },
         historyRunthrough() {

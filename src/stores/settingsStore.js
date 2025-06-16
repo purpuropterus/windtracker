@@ -7,6 +7,7 @@ export const useSettingsStore = defineStore("settings", {
             speedUnit: "mph",
             holes: 9,
             resetHotkey: null,
+            goldfishEnabled: false,
         };
     },
 

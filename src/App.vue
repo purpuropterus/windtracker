@@ -12,7 +12,9 @@
     
     <p>error: {{ historyEditorStore.error }}</p>
 
-    <p>history={{ windStore.history }}</p>  
+    <p>history={{ windStore.history }}</p> 
+    <p>goldfishHistory: {{ goldfishStore.goldfishHistory }}</p>
+ 
 
     <p>historyLength={{ windStore.historyLength }}</p>
     <p>usedDirections={{ windStore.usedDirections }}</p>
@@ -62,11 +64,11 @@ import HistoryEditor from '@/components/HistoryEditor.vue'
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from './stores/settingsStore';
 import { useHistoryEditorStore } from './stores/historyEditorStore';
-
-import { onMounted } from 'vue';
+import { useGoldfishStore } from './stores/goldfishStore';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();
+const goldfishStore = useGoldfishStore();
 const historyEditorStore = useHistoryEditorStore();
 
 </script>

@@ -9,23 +9,25 @@ import sImage from "@/assets/s.png";
 import swImage from "@/assets/sw.png";
 import wImage from "@/assets/w.png";
 import unknownImage from "@/assets/unknown.png";
+
 import { useSettingsStore } from "./settingsStore";
 import { useHistoryEditorStore } from "./historyEditorStore";
+import { useGoldfishStore } from "./goldfishStore";
 
 export const useWindStore = defineStore("wind", {
     state: () => {
         return {
             wind: {
                 directions: [
-                    { id: "NW", img: nwImage },
-                    { id: "N", img: nImage },
-                    { id: "NE", img: neImage },
-                    { id: "E", img: eImage },
-                    { id: "SE", img: seImage },
-                    { id: "S", img: sImage },
-                    { id: "SW", img: swImage },
-                    { id: "W", img: wImage },
-                    { id: "?", img: unknownImage },
+                    { id: "NW", img: nwImage, goldfishId: 5 },
+                    { id: "N", img: nImage, goldfishId: 4 },
+                    { id: "NE", img: neImage, goldfishId: 3 },
+                    { id: "E", img: eImage, goldfishId: 2 },
+                    { id: "SE", img: seImage, goldfishId: 1 },
+                    { id: "S", img: sImage, goldfishId: 0 },
+                    { id: "SW", img: swImage, goldfishId: 7 },
+                    { id: "W", img: wImage, goldfishId: 6 },
+                    { id: "?", img: unknownImage, goldfishId: 9 },
                 ],
                 speeds: [
                     { m_s: 0, mph: 0, color: "#888888" },
@@ -44,7 +46,7 @@ export const useWindStore = defineStore("wind", {
                     { m_s: 13, mph: 26, color: "#c11b3a", ogOnly: true },
                     { m_s: 14, mph: 28, color: "#c11323", ogOnly: true },
                     { m_s: 15, mph: 30, color: "#c10c0c", ogOnly: true },
-                    { m_s: 17, mph: 32, color: "#000000" },
+                    { m_s: 17, mph: 34, color: "#000000" },
                 ],
             },
 
@@ -67,6 +69,27 @@ export const useWindStore = defineStore("wind", {
         },
         wsrSpeeds() {
             return this.wind.speeds.filter((speed) => !speed.ogOnly);
+        },
+        goldfishifyHistory() {
+            return this.history
+                .filter(
+                    (pair) =>
+                        pair[0] &&
+                        Object.keys(pair[0]).length > 0 &&
+                        pair[1] &&
+                        Object.keys(pair[1]).length > 0
+                )
+                .map((pair) => {
+                    const direction =
+                        pair[0].goldfishId !== undefined
+                            ? pair[0].goldfishId
+                            : 9;
+                    const speed = pair[1].m_s !== undefined ? pair[1].m_s : 17;
+                    return {
+                        direction,
+                        speed,
+                    };
+                });
         },
     },
     actions: {
@@ -178,6 +201,9 @@ export const useWindStore = defineStore("wind", {
             if (this.historyLength % 9 === 0) {
                 this.usedSpeeds = [];
             }
+
+            useGoldfishStore().holeLoad();
+            useGoldfishStore().findSeed();
         },
         ogZeroWindProcedure() {
             let zeroDirection = this.history[this.historyLength - 1][0];
@@ -192,9 +218,8 @@ export const useWindStore = defineStore("wind", {
             }
 
             this.history[this.historyLength][0] = zeroDirection;
-            this.history[
-                this.historyLength
-            ][2].text = `${zeroDirection.id}: 9/17`;
+            this.history[this.historyLength][2].text =
+                `${zeroDirection.id}: 9/17`;
 
             this.history[8][0] = zeroDirection;
             this.history[8][2].text = `${zeroDirection.id}: 7/17`;
@@ -264,6 +289,9 @@ export const useWindStore = defineStore("wind", {
             historyEditorStore.currentlyEditingDirectionId = null;
             historyEditorStore.currentlyEditingSpeedM_s = null;
             historyEditorStore.error = null;
+
+            const goldfishStore = useGoldfishStore();
+            goldfishStore.reset();
         },
         createEmptyHistory() {
             const settingsStore = useSettingsStore();

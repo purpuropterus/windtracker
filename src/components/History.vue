@@ -13,7 +13,7 @@
       <div 
         class="history-item" 
         :class="{ highlighted: index == historyEditorStore.currentlyEditingIndex }"
-        v-for="(item, index) in windStore.history" 
+        v-for="(item, index) in history" 
         :key="item.id"
       >
 
@@ -42,17 +42,28 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 import emptyImage from "@/assets/empty.png"
 
 import { useWindStore } from '@/stores/windStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useHistoryEditorStore } from '@/stores/historyEditorStore';
+import { useGoldfishStore } from '@/stores/goldfishStore';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();
 const historyEditorStore = useHistoryEditorStore();
+const goldfishStore = useGoldfishStore();
 
 windStore.history = windStore.createEmptyHistory()
+
+const history = computed(() => {
+  // Use goldfishHistory if it exists and is not empty, otherwise use windStore.history
+  return (goldfishStore.goldfishHistory && goldfishStore.goldfishHistory.length > 0)
+    ? goldfishStore.goldfishHistory
+    : windStore.history;
+});
 
 </script>
 

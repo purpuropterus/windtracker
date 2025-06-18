@@ -6,7 +6,8 @@
         <div class="game setting">
             <label>Game:</label>
             <select v-model="settingsStore.game" tabindex="-1">
-                <option value="og">Wii Sports</option>
+                <option value="og_1.0">Wii Sports 1.0</option>
+                <option value="og_1.1">Wii Sports 1.1/1.2</option>
                 <option value="wsr" selected>Wii Sports Resort</option>
             </select>
         </div>

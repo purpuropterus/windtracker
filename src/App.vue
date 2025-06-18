@@ -25,7 +25,7 @@
 
         <div class="top">
           <Directions :directions="windStore.wind.directions"/>
-          <Speeds :speeds="settingsStore.game == 'og' ? windStore.wind.speeds : windStore.wsrSpeeds "/>
+          <Speeds :speeds="settingsStore.game.startsWith('og') ? windStore.wind.speeds : windStore.wsrSpeeds "/>
           <History />
         </div>
 

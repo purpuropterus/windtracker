@@ -3,7 +3,7 @@
 
         <div class="speeds-buttons" 
             v-if="!(windStore.historyLength==settingsStore.holes)" 
-            :style="{gridTemplateColumns: settingsStore.game == 'og' ? 'repeat(17, 1fr)' : 'repeat(12, 1fr)'}"
+            :style="{gridTemplateColumns: settingsStore.game.startsWith('og') ? 'repeat(17, 1fr)' : 'repeat(12, 1fr)'}"
         >
 
             <button 

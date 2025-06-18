@@ -144,7 +144,7 @@ export const useWindStore = defineStore("wind", {
             }
 
             //push direction to used directions
-            if (!(pair[1].m_s == 0) || !(settingsStore.game == "og")) {
+            if (!(pair[1].m_s == 0) || !settingsStore.game.startsWith("og")) {
                 if (
                     pair[0].id != "?" &&
                     !this.usedDirections.includes(pair[0])
@@ -160,7 +160,10 @@ export const useWindStore = defineStore("wind", {
                 this.usedSpeeds.push(pair[1]);
             }
 
-            if (this.historyLength == 8 && settingsStore.game == "og") {
+            if (
+                this.historyLength == 8 &&
+                settingsStore.game.startsWith("og")
+            ) {
                 this.ogHole8Procedure();
             }
 
@@ -218,8 +221,9 @@ export const useWindStore = defineStore("wind", {
             }
 
             this.history[this.historyLength][0] = zeroDirection;
-            this.history[this.historyLength][2].text =
-                `${zeroDirection.id}: 9/17`;
+            this.history[
+                this.historyLength
+            ][2].text = `${zeroDirection.id}: 9/17`;
 
             this.history[8][0] = zeroDirection;
             this.history[8][2].text = `${zeroDirection.id}: 7/17`;

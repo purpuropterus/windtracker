@@ -53,7 +53,7 @@ export const useHistoryEditorStore = defineStore("historyEditor", {
             const windStore = useWindStore();
             const settingsStore = useSettingsStore();
 
-            if (settingsStore.game == "og") {
+            if (settingsStore.game.startsWith("og")) {
                 return this.validateOgHistory();
             }
 

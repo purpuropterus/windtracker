@@ -63,7 +63,7 @@
         </div>
         <div class="goldfish-customadvance setting">
             <input type="number" v-model="goldfishStore.settings.customAdvanceNumber" placeholder="Custom advance" tabindex="-1" :disabled="!goldfishStore.settings.chaining" />
-            <button @click="goldfishStore.advance(goldfishStore.settings.customAdvanceNumber)" tabindex="-1" :disabled="!goldfishStore.settings.chaining">Custom advance (+{{ goldfishStore.settings.customAdvanceNumber }})</button>
+            <button @click="goldfishStore.advance(goldfishStore.settings.customAdvanceNumber, true); goldfishStore.findSeed()" tabindex="-1" :disabled="!goldfishStore.settings.chaining">Custom advance (+{{ goldfishStore.settings.customAdvanceNumber }})</button>
         </div>
     </div>
 </template>

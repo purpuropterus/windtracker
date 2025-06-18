@@ -28,12 +28,19 @@ export const useGoldfishStore = defineStore("goldfish", {
                 case "og_1.0":
                 case "og_1.1":
                     return (seed) =>
-                        Number((BigInt(seed) * 69069n + 1n) & 0xffffffffn);
+                        seed === null
+                            ? null
+                            : Number(
+                                  (BigInt(seed) * 69069n + 1n) & 0xffffffffn
+                              );
                 case "wsr":
                     return (seed) =>
-                        Number(
-                            (BigInt(seed) * 0x41c64e6dn + 0x3039n) & 0xffffffffn
-                        );
+                        seed === null
+                            ? null
+                            : Number(
+                                  (BigInt(seed) * 0x41c64e6dn + 0x3039n) &
+                                      0xffffffffn
+                              );
             }
         },
         advanceCounts: (state) => {
@@ -58,12 +65,19 @@ export const useGoldfishStore = defineStore("goldfish", {
         initialize: function (seed) {
             this.lastKnownSeed = seed;
         },
-        advance: function (n = 1) {
+        advance: function (n = 1, custom = false) {
             let seed = this.lastKnownSeed;
             for (let i = 0; i < n; i++) {
                 seed = this.advanceFunction(seed);
             }
             this.initialize(seed);
+            if (custom) {
+                let seed = this.seedAtStartOfRun;
+                for (let i = 0; i < n; i++) {
+                    seed = this.advanceFunction(seed);
+                }
+                this.seedAtStartOfRun = seed;
+            }
         },
         reset: function () {
             this.seedAtStartOfRun = this.lastKnownSeed;
@@ -83,11 +97,11 @@ export const useGoldfishStore = defineStore("goldfish", {
                 game: settingsStore.game,
                 last_known_seed:
                     this.settings.chaining && this.seedAtStartOfRun !== null
-                        ? this.seedAtStartOfRun
+                        ? Number(this.seedAtStartOfRun)
                         : null,
                 num_to_check:
                     this.settings.chaining && this.seedAtStartOfRun !== null
-                        ? this.settings.numToCheck || 1000
+                        ? Number(this.settings.numToCheck) || 1000
                         : null,
                 winds: winds,
             };
@@ -104,7 +118,7 @@ export const useGoldfishStore = defineStore("goldfish", {
                 const data = await res.json();
 
                 if (data.length == 1) {
-                    this.initialize(data[0].seed);
+                    this.currentSeed = data[0].seed;
 
                     const holeLoadCount = windStore.historyLength - 1;
 
@@ -114,9 +128,13 @@ export const useGoldfishStore = defineStore("goldfish", {
                     );
 
                     this.ungoldfishifyHistory(data[0].winds);
-                }
 
-                this.message = "";
+                    this.message = "";
+                } else {
+                    this.message = `${data.length} possibilities`;
+
+                    this.goldfishHistory = [];
+                }
             } else {
                 this.message = await res.text();
             }

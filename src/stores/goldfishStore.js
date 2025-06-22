@@ -118,8 +118,14 @@ export const useGoldfishStore = defineStore("goldfish", {
                 const data = await res.json();
 
                 if (data.length == 1) {
+                    // set currentSeed
+                    
                     this.currentSeed = data[0].seed;
 
+                    // then update lastKnownSeed to be the found seed + reset + hole loads
+
+                    this.lastKnownSeed = data[0].seed;
+                    
                     const holeLoadCount = windStore.historyLength - 1;
 
                     this.advance(
@@ -127,7 +133,11 @@ export const useGoldfishStore = defineStore("goldfish", {
                             this.advanceCounts.reset
                     );
 
+
+                    // convert response to wind tracker history
+
                     this.ungoldfishifyHistory(data[0].winds);
+                    
 
                     this.message = "";
                 } else {

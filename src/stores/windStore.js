@@ -205,8 +205,10 @@ export const useWindStore = defineStore("wind", {
                 this.usedSpeeds = [];
             }
 
-            useGoldfishStore().holeLoad();
-            useGoldfishStore().findSeed();
+            if (settingsStore.goldfishEnabled) {
+                useGoldfishStore().holeLoad();
+                useGoldfishStore().findSeed();
+            }
         },
         ogZeroWindProcedure() {
             let zeroDirection = this.history[this.historyLength - 1][0];

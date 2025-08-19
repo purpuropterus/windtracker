@@ -46,6 +46,9 @@
     <div class="goldfish-settings" v-if="settingsStore.goldfishEnabled">
         <h3>Goldfish Settings</h3>
         <p color="red">{{ goldfishStore.message }}</p>
+        <div class="goldfish-server setting">
+            <input type="text" v-model="goldfishStore.settings.server" placeholder="Goldfish server" tabindex="-1" />
+        </div>
         <div class="goldfish-currentseed setting">
             <input type="text" v-model="goldfishStore.currentSeed" placeholder="Current seed" tabindex="-1" />
         </div>
@@ -66,14 +69,15 @@
             <input type="number" v-model="goldfishStore.settings.customAdvanceNumber" placeholder="Custom advance" tabindex="-1" :disabled="!goldfishStore.settings.chaining" />
             <button @click="goldfishStore.advance(goldfishStore.settings.customAdvanceNumber, true); goldfishStore.findSeed()" tabindex="-1" :disabled="!goldfishStore.settings.chaining">Custom advance (+{{ goldfishStore.settings.customAdvanceNumber }})</button>
         </div>
+        <button class="reset-button" @click="goldfishStore.$reset" tabindex="-1">Reset settings to default</button>
     </div>
 </template>
 
 <script setup>
 
+import { useGoldfishStore } from '@/stores/goldfishStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useWindStore } from '@/stores/windStore';
-import { useGoldfishStore } from '@/stores/goldfishStore';
 
 const settingsStore = useSettingsStore();
 const windStore = useWindStore();
@@ -95,10 +99,7 @@ const handleKey = (ev) => {
 
 
 .reset-button {
-    font-size: 1.3vw;
-    width: 10%;
-    font-size: 1.3vw;
-    margin-right: 0.3vw;
+    font-size: 16px;
 }
 
 .setting {

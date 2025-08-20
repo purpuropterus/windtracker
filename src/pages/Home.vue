@@ -1,156 +1,56 @@
 <template>
-
-  <div class="app">
-
-    <!-- <p>currentPair: {{ windStore.currentPair }}</p>
-
-    <p>currentlyEditingIndex: {{ historyEditorStore.currentlyEditingIndex }}</p>
-
-    <p>currentlyEditingDirectionId: {{ historyEditorStore.currentlyEditingDirectionId }}</p>
-
-    <p>currentlyEditingSpeedM_s: {{ historyEditorStore.currentlyEditingSpeedM_s }}</p>
-    
-    <p>error: {{ historyEditorStore.error }}</p>
-
-    <p>history={{ windStore.history }}</p> 
-    <p>goldfishHistory: {{ goldfishStore.goldfishHistory }}</p>
- 
-
-    <p>historyLength={{ windStore.historyLength }}</p>
-    <p>usedDirections={{ windStore.usedDirections }}</p>
-    <p>usedSpeeds={{ windStore.usedSpeeds }}</p>
-    <p>zeroDirection={{ windStore.zeroDirection }}</p> -->
-
-    <div class="parent">
-
-        <div class="top">
-          <Directions :directions="windStore.wind.directions"/>
-          <Speeds :speeds="settingsStore.game.startsWith('og') ? windStore.wind.speeds : windStore.wsrSpeeds "/>
-          <History />
-        </div>
-
-        <div class="bottom">
-          <div class="bottom-left">
-            <TextMode />
-          </div>
-          <div class="bottom-right">
-            <HistoryEditor />
-            <Settings />
-          </div>
-        </div>
-
-
+    <div class="home">
+       <h1>welcome to windtracker</h1>
+       <div class="link-buttons">
+            <RouterLink to="/track"><button>track</button></RouterLink>
+            <RouterLink to="/search"><button>search</button></RouterLink>
+            <RouterLink to="/blink"><button>blink</button></RouterLink>
+       </div>
+       <div class="github-buttons">
+            <a href="https://github.com/vncz14/windtracker" target="_blank"><button>windtracker github</button></a>
+            <a href="https://github.com/vncz14/goldfish" target="_blank"><button>goldfish github</button></a>
+       </div>
     </div>
-
-    <KeyboardListener />
-
-
-
-    
-  </div>
-
 </template>
 
 <script setup>
 
-import Directions from '@/components/Directions.vue'
-import History from '@/components/History.vue'
-import HistoryEditor from '@/components/HistoryEditor.vue'
-import KeyboardListener from '@/components/KeyboardListener.vue'
-import Settings from '@/components/Settings.vue'
-import Speeds from '@/components/Speeds.vue'
-import TextMode from '@/components/TextMode.vue'
-
-import { useGoldfishStore } from '@/stores/goldfishStore'
-import { useHistoryEditorStore } from '@/stores/historyEditorStore'
-import { useSettingsStore } from '@/stores/settingsStore'
-import { useWindStore } from '@/stores/windStore'
-
-const windStore = useWindStore();
-const settingsStore = useSettingsStore();
-const goldfishStore = useGoldfishStore();
-const historyEditorStore = useHistoryEditorStore();
-
 </script>
 
-<style>
-
-body {
-  background-color: #ddd;
-  margin: 0;
+<style scoped>
+.home {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+.link-buttons, .github-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }
 
-.parent {
-  max-height: 100vh;
-  height: 100%;
-  width: 100%;
-  /* display: flex;
-  flex-direction: column; */
+.link-buttons button {
+    background-color: #222;
 }
 
-
-.top {
-  height: calc(30vw - 1vw);
-  min-height: calc(60vh - 1vw);
-  width: calc(100% - 2vw);
-
-
-  padding-top: 1vw;
-  margin: 0 1vw;
-
-  background-color: #ddd;
+.github-buttons button {
+    background-color: #333;
+    font-size: 0.8em;
+    padding: 8px 16px;
 }
 
-.bottom {
-
-  display: flex;
-  flex-direction: row;
-
-  height: 40%;
-  width: calc(100% - 2vw);
-
-  margin: 0 1vw;
-
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
-
-.bottom-left {
-  flex: 1;
-  height: 100%;
-  width: 100%;
-}
-
-.bottom-right > * {
-  margin-left: 2rem;
-}
-
-
-.bottom-right {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin: 0;
-  padding: 0;
-
-
-  height: 100%;
-  width: 100%;
-}
-
-select {
-    font-size: 1.3vw;
-}
-
-label {
-    margin-right: 0.3vw;
-    font-size: 1.3vw;
-}
-
 </style>

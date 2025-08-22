@@ -1,7 +1,10 @@
 <template>
-    <div>
-        <button @click="recordBlink">record</button>
-        <button @click="reset">reset</button>
+    <div class="blink-recorder">
+        <div class="control-buttons">
+            <button @click="recordBlink">record</button>
+            <button @click="reset">reset</button>
+            <button @click="correctObviousGaps">correct obvious gaps</button>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -12,7 +15,12 @@
             </thead>
             <tbody>
                 <tr v-for="(time, index) in recordedBlinkTimes" :key="index">
-                    <td>{{ framesSinceStart[index]?.toFixed(0) }}</td>
+                    <td>
+                        <span>
+                            {{ framesSinceStart[index]?.toFixed(0) }}
+                        </span>
+                        <button @click="deleteBlink(index)">delete</button>
+                    </td>
                     <td>
                         <span>{{ index === 0 ? "" : rawGaps[index].toFixed(0) }}</span>
                         <span
@@ -40,6 +48,17 @@
 <script setup>
 
 import { computed, ref } from 'vue';
+
+const props = defineProps({
+    addOrEditCallback: {
+        type: Function,
+        required: false,
+    },
+    resetCallback: {
+        type: Function,
+        required: false,
+    }
+});
 
 const framesToMs = (frames) => frames * 16.667;
 const msToFrames = (ms) => ms / 16.667;
@@ -86,17 +105,44 @@ const rawAccuracies = computed(() => {
 
 const recordBlink = () => {
     recordedBlinkTimes.value.push(Date.now());
+
+    if (props.addOrEditCallback) {
+        props.addOrEditCallback([...correctedFrameGaps.value]);
+    }
 };
 
 const reset = () => {
     recordedBlinkTimes.value = [];
+
+    if (props.resetCallback) {
+        props.resetCallback();
+    }
 }
+
+const deleteBlink = (index) => {
+    recordedBlinkTimes.value.splice(index, 1);
+    if (props.addOrEditCallback) {
+        props.addOrEditCallback([...correctedFrameGaps.value]);
+    }
+};
+
+const correctObviousGaps = () => {
+    for (let i = 1; i < correctedFrameGaps.value.length; i++) {
+        if (BLINK_WAIT_FRAME_COUNTS.slice(0,3).includes(correctedFrameGaps.value[i])) {
+            correctGap(i);
+        }
+    }
+};
 
 const adjustTime = (index, delta, newValue) => {
     if (newValue !== undefined) {
         recordedBlinkTimes.value[index] = newValue;
     } else if (delta !== undefined) {
         recordedBlinkTimes.value[index] += framesToMs(delta);
+    }
+
+    if (props.addOrEditCallback) {
+        props.addOrEditCallback([...correctedFrameGaps.value]);
     }
 };
 
@@ -105,6 +151,10 @@ const correctGap = (index) => {
     const prevTime = recordedBlinkTimes.value[index - 1];
     const correctedGapMs = framesToMs(correctedFrameGaps.value[index]);
     adjustTime(index, undefined, prevTime + correctedGapMs);
+
+    if (props.addOrEditCallback) {
+        props.addOrEditCallback([...correctedFrameGaps.value]);
+    }
 };
 
 
@@ -112,11 +162,28 @@ const correctGap = (index) => {
 
 <style scoped>
 
+.blink-recorder {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 th, td {
     width: auto;
     border: 1px solid #000;
     padding: 8px;
     font-weight: normal;
+}
+
+button {
+    margin: 0 4px;
+    padding: 4px 8px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.control-buttons {
+    height: 40px;
 }
 
 </style>

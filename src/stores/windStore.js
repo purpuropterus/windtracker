@@ -1,18 +1,18 @@
 import { defineStore } from "pinia";
 
-import nwImage from "@/assets/nw.png";
+import eImage from "@/assets/e.png";
 import nImage from "@/assets/n.png";
 import neImage from "@/assets/ne.png";
-import eImage from "@/assets/e.png";
-import seImage from "@/assets/se.png";
+import nwImage from "@/assets/nw.png";
 import sImage from "@/assets/s.png";
+import seImage from "@/assets/se.png";
 import swImage from "@/assets/sw.png";
-import wImage from "@/assets/w.png";
 import unknownImage from "@/assets/unknown.png";
+import wImage from "@/assets/w.png";
 
-import { useSettingsStore } from "./settingsStore";
-import { useHistoryEditorStore } from "./historyEditorStore";
 import { useGoldfishStore } from "./goldfishStore";
+import { useHistoryEditorStore } from "./historyEditorStore";
+import { useSettingsStore } from "./settingsStore";
 
 export const useWindStore = defineStore("wind", {
     state: () => {
@@ -223,12 +223,11 @@ export const useWindStore = defineStore("wind", {
             }
 
             this.history[this.historyLength][0] = zeroDirection;
-            this.history[
-                this.historyLength
-            ][2].text = `${zeroDirection.id}: 9/17`;
+            this.history[this.historyLength][2].text =
+                `${zeroDirection.id}: 9/16`;
 
             this.history[8][0] = zeroDirection;
-            this.history[8][2].text = `${zeroDirection.id}: 7/17`;
+            this.history[8][2].text = `${zeroDirection.id}: 7/16`;
 
             this.zeroDirection = zeroDirection;
 

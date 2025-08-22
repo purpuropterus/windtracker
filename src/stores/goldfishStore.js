@@ -7,6 +7,7 @@ export const useGoldfishStore = defineStore("goldfish", {
     state: () => {
         return {
             settings: {
+                server: "https://goldfish.914000.xyz",
                 chaining: false,
                 numToCheck: 1000,
                 customAdvanceNumber: 1000,
@@ -90,6 +91,7 @@ export const useGoldfishStore = defineStore("goldfish", {
         findSeed: async function () {
             const windStore = useWindStore();
             const settingsStore = useSettingsStore();
+            const goldfishStore = useGoldfishStore();
 
             const winds = windStore.goldfishifyHistory;
 
@@ -106,26 +108,29 @@ export const useGoldfishStore = defineStore("goldfish", {
                 winds: winds,
             };
 
-            const res = await fetch("https://goldfish.914000.xyz/wind2seed", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(json),
-            });
+            const res = await fetch(
+                `${goldfishStore.settings.server}/wind2seed`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(json),
+                }
+            );
 
             if (res.ok) {
                 const data = await res.json();
 
                 if (data.length == 1) {
                     // set currentSeed
-                    
+
                     this.currentSeed = data[0].seed;
 
                     // then update lastKnownSeed to be the found seed + reset + hole loads
 
                     this.lastKnownSeed = data[0].seed;
-                    
+
                     const holeLoadCount = windStore.historyLength - 1;
 
                     this.advance(
@@ -133,11 +138,9 @@ export const useGoldfishStore = defineStore("goldfish", {
                             this.advanceCounts.reset
                     );
 
-
                     // convert response to wind tracker history
 
                     this.ungoldfishifyHistory(data[0].winds);
-                    
 
                     this.message = "";
                 } else {

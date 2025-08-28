@@ -7,8 +7,8 @@
             <RouterLink to="/blink"><button>blink</button></RouterLink>
        </div>
        <div class="github-buttons">
-            <a href="https://github.com/vncz14/windtracker" target="_blank"><button>windtracker github</button></a>
-            <a href="https://github.com/vncz14/goldfish" target="_blank"><button>goldfish github</button></a>
+            <a href="https://github.com/purpuropterus/windtracker" target="_blank"><button>windtracker github</button></a>
+            <a href="https://github.com/purpuropterus/goldfish" target="_blank"><button>goldfish github</button></a>
        </div>
     </div>
 </template>

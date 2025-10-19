@@ -29,7 +29,10 @@
 
         <div class="bottom">
           <div class="bottom-left">
-            <TextMode />
+            <div class="text-mode-div">
+                <TextMode />
+            </div>
+            <button class="mobile-reset-button" @click="windStore.reset">Reset</button>
           </div>
           <div class="bottom-right">
             <HistoryEditor />
@@ -52,18 +55,17 @@
 <script setup>
 
 import Directions from '@/components/Directions.vue'
-import Speeds from '@/components/Speeds.vue'
-import Settings from '@/components/Settings.vue'
 import History from '@/components/History.vue'
-import KeyboardListener from '@/components/KeyboardListener.vue'
-import TextMode from '@/components/TextMode.vue'
 import HistoryEditor from '@/components/HistoryEditor.vue'
+import KeyboardListener from '@/components/KeyboardListener.vue'
+import Settings from '@/components/Settings.vue'
+import Speeds from '@/components/Speeds.vue'
+import TextMode from '@/components/TextMode.vue'
 
-import { useWindStore } from '@/stores/windStore';
-import { useSettingsStore } from './stores/settingsStore';
-import { useHistoryEditorStore } from './stores/historyEditorStore';
+import { useWindStore } from '@/stores/windStore'
+import { useHistoryEditorStore } from './stores/historyEditorStore'
+import { useSettingsStore } from './stores/settingsStore'
 
-import { onMounted } from 'vue';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();
@@ -87,16 +89,19 @@ body {
 
 .parent {
   max-height: 100vh;
-  height: 100%;
+  height: 100vh;
   width: 100%;
-  /* display: flex;
-  flex-direction: column; */
+  display: flex;
+  flex-direction: column;
 }
 
 
 .top {
-  height: calc(30vw - 1vw);
-  min-height: calc(60vh - 1vw);
+display: flex;
+flex-direction: column;
+
+flex: 1 1 auto;
+
   width: calc(100% - 2vw);
 
 
@@ -110,8 +115,10 @@ body {
 
   display: flex;
   flex-direction: row;
+  flex: 0 0 auto;
 
-  height: 40%;
+
+  height: auto;
   width: calc(100% - 2vw);
 
   margin: 0 1vw;
@@ -122,6 +129,23 @@ body {
   flex: 1;
   height: 100%;
   width: 100%;
+}
+
+.text-mode-div {
+    @media (pointer: coarse) {
+        display: none;
+    }
+}
+
+.mobile-reset-button {
+    margin-top: 1rem;
+    font-size: 2rem;
+    padding: 0.5rem 1rem;
+
+    display: none;
+    @media (pointer: coarse) {
+        display: block;
+    }
 }
 
 .bottom-right > * {

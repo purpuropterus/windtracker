@@ -44,6 +44,29 @@ export const useGoldfishStore = defineStore("goldfish", {
                               );
             }
         },
+        unadvanceFunction: (state) => {
+            const settingsStore = useSettingsStore();
+
+            switch (settingsStore.game) {
+                case "og_1.0":
+                case "og_1.1":
+                    return (seed) =>
+                        seed === null
+                            ? null
+                            : Number(
+                                  ((BigInt(seed) - 1n) * 2783094533n) &
+                                      0xffffffffn
+                              );
+                case "wsr":
+                    return (seed) =>
+                        seed === null
+                            ? null
+                            : Number(
+                                  ((BigInt(seed) - 0x3039n) * 4005161829n) &
+                                      0xffffffffn
+                              );
+            }
+        },
         advanceCounts: (state) => {
             const settingsStore = useSettingsStore();
 
@@ -76,6 +99,20 @@ export const useGoldfishStore = defineStore("goldfish", {
                 let seed = this.seedAtStartOfRun;
                 for (let i = 0; i < n; i++) {
                     seed = this.advanceFunction(seed);
+                }
+                this.seedAtStartOfRun = seed;
+            }
+        },
+        unadvance: function (n = 1, custom = false) {
+            let seed = this.lastKnownSeed;
+            for (let i = 0; i < n; i++) {
+                seed = this.unadvanceFunction(seed);
+            }
+            this.initialize(seed);
+            if (custom) {
+                let seed = this.seedAtStartOfRun;
+                for (let i = 0; i < n; i++) {
+                    seed = this.unadvanceFunction(seed);
                 }
                 this.seedAtStartOfRun = seed;
             }

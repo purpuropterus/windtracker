@@ -67,7 +67,11 @@
         </div>
         <div class="goldfish-customadvance setting">
             <input type="number" v-model="goldfishStore.settings.customAdvanceNumber" placeholder="Custom advance" tabindex="-1" :disabled="!goldfishStore.settings.chaining" />
-            <button @click="goldfishStore.advance(goldfishStore.settings.customAdvanceNumber, true); goldfishStore.findSeed()" tabindex="-1" :disabled="!goldfishStore.settings.chaining">Custom advance (+{{ goldfishStore.settings.customAdvanceNumber }})</button>
+            <div style="display: flex; gap: 5px;">
+                <span style="font-size: 1rem">Custom advance</span>
+                <button @click="goldfishStore.advance(goldfishStore.settings.customAdvanceNumber, true); goldfishStore.findSeed()" tabindex="-1" :disabled="!goldfishStore.settings.chaining">+{{ goldfishStore.settings.customAdvanceNumber }}</button>
+                <button @click="goldfishStore.unadvance(goldfishStore.settings.customAdvanceNumber, true); goldfishStore.findSeed()" tabindex="-1" :disabled="!goldfishStore.settings.chaining">-{{ goldfishStore.settings.customAdvanceNumber }}</button>
+            </div>
         </div>
         <button class="reset-button" @click="goldfishStore.$reset" tabindex="-1">Reset settings to default</button>
     </div>
@@ -93,8 +97,8 @@ const handleKey = (ev) => {
 
 <style scoped>
 
-.setting {
-    font-size: 1.3vw;
+.goldfish-settings, label {
+    font-size: 1rem;
 }
 
 

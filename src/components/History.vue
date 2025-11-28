@@ -34,7 +34,7 @@
             <p class="history-item-index">{{ index + 1 }}</p>
           </div>
           <p v-if="item[2].text" class="history-item-id">{{ item[2].text }}</p>
-          <p v-else class="history-item-id">{{ item[1].m_s === 17 ? '' : item[1][settingsStore.speedUnit] }}{{ item[0]["id"] }}</p>
+          <p v-else class="history-item-id big-speed">{{ item[1].m_s === 17 ? '' : item[1][settingsStore.speedUnit] }}<!--{{ item[0]["id"] }}--></p>
         </div>
       </div>
     </div>
@@ -42,11 +42,12 @@
 </template>
 
 <script setup>
-import emptyImage from "@/assets/empty.png"
 
-import { useWindStore } from '@/stores/windStore';
-import { useSettingsStore } from '@/stores/settingsStore';
+import emptyImage from "@/assets/empty.png";
+
 import { useHistoryEditorStore } from '@/stores/historyEditorStore';
+import { useSettingsStore } from '@/stores/settingsStore';
+import { useWindStore } from '@/stores/windStore';
 
 const windStore = useWindStore();
 const settingsStore = useSettingsStore();
@@ -107,12 +108,17 @@ windStore.history = windStore.createEmptyHistory()
 
 .history-item-id {
   margin: 0;
-  font-size: 1vw;
+  font-size: 0.8vw;
   position: absolute;
   top: 50%; /* Center the text vertically */
   left: 50%; /* Center the text horizontally */
   transform: translate(-50%, -50%); /* Adjust both vertical and horizontal positions */
   color: white;
+}
+
+.big-speed {
+  font-size: 3vw;
+  font-weight: bold;
 }
 
 .highlighted {

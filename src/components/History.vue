@@ -34,7 +34,15 @@
             <p class="history-item-index">{{ index + 1 }}</p>
           </div>
           <p v-if="item[2].text" class="history-item-id">{{ item[2].text }}</p>
-          <p v-else class="history-item-id big-speed">{{ item[1].m_s === 17 ? '' : item[1][settingsStore.speedUnit] }}<!--{{ item[0]["id"] }}--></p>
+          <p 
+            v-else 
+            class="history-item-id"
+            :style="{
+                fontSize: settingsStore.holes == 9 ? '3vw' : '1.5vw',
+            }"
+          >
+            {{ item[1].m_s === 17 ? '?' : item[1][settingsStore.speedUnit] }}<!--{{ item[0]["id"] }}-->
+        </p>
         </div>
       </div>
     </div>
@@ -108,17 +116,13 @@ windStore.history = windStore.createEmptyHistory()
 
 .history-item-id {
   margin: 0;
-  font-size: 0.8vw;
   position: absolute;
   top: 50%; /* Center the text vertically */
   left: 50%; /* Center the text horizontally */
   transform: translate(-50%, -50%); /* Adjust both vertical and horizontal positions */
   color: white;
-}
-
-.big-speed {
-  font-size: 3vw;
-  font-weight: bold;
+  font-weight:bold;
+  font-size: 1vw;
 }
 
 .highlighted {

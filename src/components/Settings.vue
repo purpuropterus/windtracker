@@ -103,6 +103,7 @@ const handleKey = (ev) => {
 
 
 .reset-button {
+    margin-top: 1rem;
     font-size: 16px;
 }
 

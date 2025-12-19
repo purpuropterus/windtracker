@@ -45,6 +45,8 @@
         </p>
         </div>
       </div>
+
+      <button class="copy-button" @click="onClickCopy">Copy</button>
     </div>
   <!-- </div> -->
 </template>
@@ -67,11 +69,29 @@ const goldfishStore = useGoldfishStore();
 windStore.history = windStore.createEmptyHistory()
 
 const history = computed(() => {
-  // Use goldfishHistory if it exists and is not empty, otherwise use windStore.history
   return (goldfishStore.goldfishHistory && goldfishStore.goldfishHistory.length > 0)
     ? goldfishStore.goldfishHistory
     : windStore.history;
 });
+
+const historyString = computed(() => {
+    return history.value.reduce((acc, item) => {
+        const direction = item[0].id || "?";
+        const speed = item[1].m_s !== undefined ? item[1].m_s : "?";
+        
+        if (direction === "?" && speed === "?") {
+            return acc;
+        }
+
+        acc.push(`${speed}${direction}`);
+
+        return acc;
+    }, []).join(" ");
+});
+
+const onClickCopy = () => {
+    navigator.clipboard.writeText(historyString.value);
+}
 
 </script>
 
@@ -137,6 +157,12 @@ const history = computed(() => {
 
 .highlighted {
   background-color: green;
+}
+
+.copy-button {
+    margin-top: 1rem;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
 }
 
 </style>

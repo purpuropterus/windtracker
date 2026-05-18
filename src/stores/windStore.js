@@ -44,7 +44,7 @@ export const useWindStore = defineStore("wind", {
                     { m_s: 13, mph: 26, color: "#c11b3a", ogOnly: true },
                     { m_s: 14, mph: 28, color: "#c11323", ogOnly: true },
                     { m_s: 15, mph: 30, color: "#c10c0c", ogOnly: true },
-                    { m_s: 17, mph: 32, color: "#000000" },
+                    { m_s: 17, mph: 34, color: "#000000" },
                 ],
             },
 

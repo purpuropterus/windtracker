@@ -1,16 +1,21 @@
 <template>
     <div class="text-mode">
         <h3>Text Mode</h3>
-        <input v-model="windString" @keypress.enter="handleKey" type="text" tabindex="0">
-        <p class="error" v-if="error"> {{ error }}</p>
+        <input
+            v-model="windString"
+            @keypress.enter="handleKey"
+            type="text"
+            tabindex="0"
+        />
+        <p class="error" v-if="error">{{ error }}</p>
     </div>
 </template>
 
 <script setup>
 
+import { useHistoryEditorStore } from '@/stores/historyEditorStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useWindStore } from '@/stores/windStore';
-import { useHistoryEditorStore } from '@/stores/historyEditorStore';
 import { ref } from 'vue';
 
 const settingsStore = useSettingsStore();
@@ -73,7 +78,7 @@ const handleKey = (ev) => {
         historyEditorStore.currentlyEditingDirectionId = pair[0].id
         historyEditorStore.currentlyEditingSpeedM_s = pair[1].m_s
         historyEditorStore.save()
-    } 
+    }
     // else, we are adding a new entry
     else {
         // don't allow adding new if the history is full
@@ -86,7 +91,7 @@ const handleKey = (ev) => {
 
     // clear textbox
     windString.value = ""
-    
+
     // clear error
     error.value = ""
 }
@@ -98,7 +103,7 @@ const parse = (str) => {
 
     // special case for "??" which means unknown direction and speed
     if (direction === "??") {
-        return ["?", 17]; 
+        return ["?", 17];
     }
 
     // if direction contains ONE "?" and other letters, it also means unknown speed
@@ -106,8 +111,17 @@ const parse = (str) => {
         return [direction.replace(/\?/g, ""), 17];
     }
 
-    const speedMatch = str.match(/\d+/);
-    const speed = speedMatch ? parseInt(speedMatch[0], 10) : 999;
+    const speedMatch = str.match(/[\d?/]+/)[0].replace("/", "?");
+
+
+    let speed;
+    if (speedMatch === "?") {
+        speed = 17;
+    } else if (speedMatch.length > 0) {
+        speed = parseInt(speedMatch);
+    } else {
+        speed = 999; // invalid, will be caught in validation
+    }
 
     return [direction, speed];
 }
@@ -144,26 +158,21 @@ const validateParsed = (parsed) => {
 
     return [directionObject, speedObject, {}];
 }
-
-
-
 </script>
 
 <style scoped>
-    
-    .text-mode {
-        text-align: left;
-    }
+.text-mode {
+    text-align: left;
+}
 
-    .error {
-        color: red;
-    }
+.error {
+    color: red;
+}
 
-    input {
-        height: 100%;
-        width: 10rem;
-        padding: 1rem;
-        font-size: 2rem;
-    }
-
+input {
+    height: 100%;
+    width: 10rem;
+    padding: 1rem;
+    font-size: 2rem;
+}
 </style>

@@ -14,8 +14,9 @@
                             {{ "0x" + result.seed.toString(16) }}
                         </span>
                         <div class="seed-buttons">
-                            <button>track</button> 
+                            <button>track</button>
                             <button>search</button>
+                            <button>advance</button>
                         </div>
                     </td>
                     <td>{{ result.accuracy }}</td>
@@ -26,18 +27,17 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
     results: {
         type: Array,
-        required: true
-    }
+        required: true,
+    },
 });
-
 </script>
 
 <style scoped>
-td, th{
+td,
+th {
     width: auto;
     border: 1px solid #000;
     padding: 8px;
@@ -49,8 +49,7 @@ td, th{
 }
 
 .seed-buttons {
-    display:flex;
+    display: flex;
     gap: 5px;
 }
-
 </style>

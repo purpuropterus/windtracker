@@ -1,15 +1,42 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import Advance from "@/pages/Advance.vue";
 import Blink from "@/pages/Blink.vue";
 import Home from "@/pages/Home.vue";
 import Search from "@/pages/Search.vue";
 import Track from "@/pages/Track.vue";
 
 const routes = [
-    { path: "/", component: Home },
-    { path: "/track", component: Track },
-    { path: "/search", component: Search },
-    { path: "/blink", component: Blink },
+    {
+        path: "/",
+        name: "home",
+        component: Home,
+        meta: { navbar: true, label: "windtracker" },
+    },
+    {
+        path: "/track",
+        name: "track",
+        component: Track,
+        meta: { navbar: true, label: "track", homepage: true },
+    },
+    {
+        path: "/blink",
+        name: "blink",
+        component: Blink,
+        meta: { navbar: true, label: "blink", homepage: true },
+    },
+    {
+        path: "/search",
+        name: "search",
+        component: Search,
+        meta: { navbar: true, label: "search", homepage: true },
+    },
+    {
+        path: "/advance",
+        name: "advance",
+        component: Advance,
+        meta: { navbar: true, label: "advance", homepage: true },
+    },
 ];
 
 const router = createRouter({

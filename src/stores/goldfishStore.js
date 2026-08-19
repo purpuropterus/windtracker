@@ -88,6 +88,11 @@ export const useGoldfishStore = defineStore("goldfish", {
         holeLoad: function () {
             this.advance(this.advanceCounts.hole_load);
         },
+        setKnownSeed: function (seed) {
+            this.lastKnownSeed = seed;
+            this.seedAtStartOfRun = seed;
+            this.currentSeed = seed;
+        },
         findSeed: async function () {
             const windStore = useWindStore();
             const settingsStore = useSettingsStore();

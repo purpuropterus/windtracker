@@ -8,6 +8,8 @@ export const useSettingsStore = defineStore("settings", {
             holes: 9,
             resetHotkey: null,
             goldfishEnabled: false,
+
+            targetSeed: null,
         };
     },
 

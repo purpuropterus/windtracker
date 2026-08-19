@@ -14,9 +14,9 @@
                             {{ "0x" + result.seed.toString(16) }}
                         </span>
                         <div class="seed-buttons">
-                            <button>track</button>
-                            <button>search</button>
-                            <button>advance</button>
+                            <button @click="setSeedToCurrent">
+                                set to current seed
+                            </button>
                         </div>
                     </td>
                     <td>{{ result.accuracy }}</td>
@@ -33,6 +33,11 @@ const props = defineProps({
         required: true,
     },
 });
+
+const setSeedToCurrent = (seed) => {
+    const goldfishStore = useGoldfishStore();
+    goldfishStore.setKnownSeed(seed);
+};
 </script>
 
 <style scoped>

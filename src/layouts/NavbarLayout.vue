@@ -70,5 +70,6 @@ nav a.router-link-active {
     min-height: 0;
     min-width: 0;
     overflow: auto;
+    padding: 1rem;
 }
 </style>

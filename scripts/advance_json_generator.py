@@ -5,19 +5,19 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Task:
     points: int
-    time: int
+    first_time: int
+    subsequent_time: int
     name: str
     is_extra: bool = False
 
 
 tasks = [
-    Task(237, 10, "Picking Up Spares"),
-    Task(170, 10, "Power Throws"),
-    Task(12, 10, "Target Practice (Tennis)"),
-    Task(25, 10, "Putting"),
-    Task(26, 10, "Hitting the Green"),
-    Task(31, 10, "Target Practice (Golf)"),
-    Task(1, 3, "Extra blink", True),
+    Task(237, 10, 3, "Picking Up Spares"),
+    Task(170, 10, 3, "Power Throws"),
+    Task(12, 10, 3, "Target Practice (Tennis)"),
+    Task(25, 10, 3, "Putting"),
+    Task(26, 10, 3, "Hitting the Green"),
+    Task(1, 3, 3, "Extra blink", True),
 ]
 
 
@@ -55,7 +55,10 @@ def find_shortest(n, ratio_num=1, ratio_den=4):
             ):
                 continue
 
-            time = previous_time + task.time
+            if frequencies[i] == 1:
+                time = previous_time + task.first_time
+            else:
+                time = previous_time + task.subsequent_time
 
             if best is None or time < best[0]:
                 best = (time, frequencies)

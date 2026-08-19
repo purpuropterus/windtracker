@@ -1,23 +1,26 @@
-import { lcgDistance } from "./rng_util";
+import { pcgDistance } from "./rng_util.js";
 
 const lcgStep = (v, a, c, m) => (((a * v + c) % m) + m) % m;
 
-describe("lcgDistance", () => {
+describe("pcgDistance", () => {
     it("recovers randomly generated distances", () => {
-        const a = 69069n;
-        const c = 1n;
-        const m = 65536n;
+        const a = 69069;
+        const c = 1;
+        const m = 2 ** 16;
 
-        for (let start = 0n; start < 100; start++) {
-            let current = start;
+        const seedrandom = require("seedrandom");
+        const rand = new seedrandom("test");
 
-            for (let distance = 0; distance < 100; distance++) {
-                expect(lcgDistance(start, current, a, c, m)).toBe(
-                    BigInt(distance),
-                );
+        for (let i = 0; i < 100; i++) {
+            const v1 = Math.floor(rand.quick() * m);
+            const distance = Math.floor(rand.quick() * 1000);
+            let v2 = v1;
 
-                current = lcgStep(current, a, c, m);
+            for (let j = 0; j < distance; j++) {
+                v2 = lcgStep(v2, a, c, m);
             }
+
+            expect(pcgDistance(v1, v2, a, c, m)).toEqual(BigInt(distance));
         }
     });
 });

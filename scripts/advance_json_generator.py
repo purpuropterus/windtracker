@@ -5,20 +5,23 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Task:
     points: int
-    first_time: int
-    subsequent_time: int
+    first_time: int | None
+    subsequent_time: int | None
     name: str
-    is_extra: bool = False
+    is_blink_prone: bool = False
+    is_extra_blink: bool = False
 
 
 tasks = [
-    Task(237, 10, 3, "Picking Up Spares"),
-    Task(170, 10, 3, "Power Throws"),
-    Task(12, 10, 3, "Target Practice (Tennis)"),
-    Task(25, 10, 3, "Putting"),
-    Task(26, 10, 3, "Hitting the Green"),
-    Task(1, 3, 3, "Extra blink", True),
+    Task(114, 3, 3, "Tennis", False),
+    Task(13, 10, 3, "Target Practice (Tennis)", True),
+    Task(26, 10, 3, "Putting", True),
+    Task(27, 10, 3, "Hitting the Green", True),
+    Task(1, None, None, "Extra blink", False, True),
 ]
+
+TENNIS_BLINK_TIME = 1
+OTHER_BLINK_TIME = 3
 
 
 def find_shortest(n, ratio_num=1, ratio_den=4):
@@ -35,7 +38,7 @@ def find_shortest(n, ratio_num=1, ratio_den=4):
 
             if points < task.points:
                 continue
-
+            
             previous = dp[points - task.points]
 
             if previous is None:
@@ -46,20 +49,39 @@ def find_shortest(n, ratio_num=1, ratio_den=4):
             frequencies = previous_freq.copy()
             frequencies[i] += 1
 
-            total_tasks = sum(frequencies)
-            extra_tasks = frequencies[-1]
+            total_blink_prone_tasks = sum(
+                frequencies[j]
+                for j, t in enumerate(tasks)
+                if t.is_blink_prone
+            )
+            
+            total_extra_blinks = sum(
+                frequencies[j]
+                for j, t in enumerate(tasks)
+                if t.is_extra_blink
+            )
+            
+            tennis_extra_blinks = min(4 * frequencies[0] + 3, total_extra_blinks)
+            non_tennis_extra_blinks = total_extra_blinks - tennis_extra_blinks
 
             if (
-                extra_tasks * ratio_den
-                < total_tasks * ratio_num
+                non_tennis_extra_blinks * ratio_den
+                < total_blink_prone_tasks * ratio_num
             ):
                 continue
 
-            if frequencies[i] == 1:
+            if task.is_extra_blink:
+                tennis_frequency = frequencies[0]
+                time = previous_time + (
+                    TENNIS_BLINK_TIME
+                    if frequencies[i] <= tennis_extra_blinks
+                    else OTHER_BLINK_TIME
+                )
+            elif frequencies[i] == 1:
                 time = previous_time + task.first_time
             else:
                 time = previous_time + task.subsequent_time
-
+                
             if best is None or time < best[0]:
                 best = (time, frequencies)
 
@@ -94,7 +116,7 @@ for points in range(1, N + 1):
     time, frequencies = result
 
     output["solutions"].append([
-        time,
+        round(time),
         *frequencies
     ])
 

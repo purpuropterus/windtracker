@@ -14,7 +14,9 @@
                             {{ "0x" + result.seed.toString(16) }}
                         </span>
                         <div class="seed-buttons">
-                            <button @click="setSeedToCurrent">
+                            <button
+                                @click="() => setSeedToCurrent(result.seed)"
+                            >
                                 set to current seed
                             </button>
                         </div>
@@ -27,6 +29,9 @@
 </template>
 
 <script setup>
+import { useGoldfishStore } from "@/stores/goldfishStore";
+import { defineProps } from "vue";
+
 const props = defineProps({
     results: {
         type: Array,

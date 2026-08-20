@@ -1,5 +1,6 @@
 import json
 from dataclasses import dataclass
+from math import comb
 
 
 @dataclass(frozen=True)
@@ -23,8 +24,28 @@ tasks = [
 TENNIS_BLINK_TIME = 1
 OTHER_BLINK_TIME = 3
 
+EXTRA_BLINK_CHANCE = 1/5
+TOLERANCE = 1/1000
 
-def find_shortest(n, ratio_num=1, ratio_den=4):
+def min_extra_blinks(total_blink_prone_tasks):
+    
+    cumulative_probability = 0.0
+
+    for extra_blinks in range(total_blink_prone_tasks + 1):
+        cumulative_probability += (
+            comb(total_blink_prone_tasks, extra_blinks)
+            * EXTRA_BLINK_CHANCE ** extra_blinks
+            * (1 - EXTRA_BLINK_CHANCE)
+            ** (total_blink_prone_tasks - extra_blinks)
+        )
+
+        if cumulative_probability >= 1 - TOLERANCE:
+            return extra_blinks
+
+    return total_blink_prone_tasks
+
+
+def find_shortest(n):
 
     dp = [None] * (n + 1)
 
@@ -33,6 +54,7 @@ def find_shortest(n, ratio_num=1, ratio_den=4):
     for points in range(1, n + 1):
 
         best = None
+        best_suboptimal = None
 
         for i, task in enumerate(tasks):
 
@@ -65,11 +87,13 @@ def find_shortest(n, ratio_num=1, ratio_den=4):
             non_tennis_extra_blinks = total_extra_blinks - tennis_extra_blinks
 
             if (
-                total_extra_blinks * ratio_den
-                < total_blink_prone_tasks * ratio_num
+                # -1 because you can home menu the last one
+                total_blink_prone_tasks > 1
+                and total_extra_blinks < min_extra_blinks(total_blink_prone_tasks - 1)
             ):
+                best_suboptimal = (previous_time, frequencies)
                 continue
-
+            
             if task.is_extra_blink:
                 time = previous_time + (
                     TENNIS_BLINK_TIME
@@ -84,7 +108,10 @@ def find_shortest(n, ratio_num=1, ratio_den=4):
             if best is None or time < best[0]:
                 best = (time, frequencies)
 
-        dp[points] = best
+        if best is None:
+            dp[points] = best_suboptimal
+        else:
+            dp[points] = best
 
     return dp
 

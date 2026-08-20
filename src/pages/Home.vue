@@ -11,7 +11,6 @@
             </RouterLink>
         </div>
         <div class="github-buttons">
-            <p>star me on github if you find it useful :)</p>
             <div class="github-buttons-buttons">
                 <a
                     href="https://github.com/purpuroptery/windtracker"
@@ -54,6 +53,13 @@ const homepageRoutes = router
 .github-buttons-buttons {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.github-buttons {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 10px;
 }

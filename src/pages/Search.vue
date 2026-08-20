@@ -1,12 +1,9 @@
 <template>
-  <div class="search">
-    <h2>Search</h2>
-  </div>
+    <div class="search">
+        <h2>wip</h2>
+    </div>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -65,13 +65,12 @@ def find_shortest(n, ratio_num=1, ratio_den=4):
             non_tennis_extra_blinks = total_extra_blinks - tennis_extra_blinks
 
             if (
-                non_tennis_extra_blinks * ratio_den
+                total_extra_blinks * ratio_den
                 < total_blink_prone_tasks * ratio_num
             ):
                 continue
 
             if task.is_extra_blink:
-                tennis_frequency = frequencies[0]
                 time = previous_time + (
                     TENNIS_BLINK_TIME
                     if frequencies[i] <= tennis_extra_blinks
@@ -94,8 +93,6 @@ N = 5000
 
 results = find_shortest(
     N,
-    ratio_num=1,
-    ratio_den=4,
 )
 
 

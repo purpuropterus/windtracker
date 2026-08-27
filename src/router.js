@@ -4,6 +4,7 @@ import Advance from "@/pages/Advance.vue";
 import Blink from "@/pages/Blink.vue";
 import Home from "@/pages/Home.vue";
 import Search from "@/pages/Search.vue";
+import Simulate from "@/pages/Simulate.vue";
 import Track from "@/pages/Track.vue";
 
 const routes = [
@@ -36,6 +37,12 @@ const routes = [
         name: "advance",
         component: Advance,
         meta: { navbar: true, label: "advance", homepage: true },
+    },
+    {
+        path: "/simulate",
+        name: "simulate",
+        component: Simulate,
+        meta: { navbar: true, label: "simulate", homepage: true },
     },
 ];
 

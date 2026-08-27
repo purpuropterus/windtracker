@@ -1,5 +1,6 @@
-export function pcgDistance(v1, v2, a, c, m) {
+export const lcgStep = (v, a, c, m) => (((a * v + c) % m) + m) % m;
 
+export function pcgDistance(v1, v2, a, c, m) {
     // https://math.stackexchange.com/questions/2008585/computing-the-distance-between-two-linear-congruential-generator-states
 
     const modulus = BigInt(m);

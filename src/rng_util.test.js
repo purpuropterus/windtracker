@@ -1,6 +1,4 @@
-import { pcgDistance } from "./rng_util.js";
-
-const lcgStep = (v, a, c, m) => (((a * v + c) % m) + m) % m;
+import { lcgStep, pcgDistance } from "./rng_util.js";
 
 describe("pcgDistance", () => {
     it("recovers randomly generated distances", () => {

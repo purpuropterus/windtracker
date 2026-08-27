@@ -1,10 +1,10 @@
 <template>
     <div class="advance-results">
-        <!-- <div class="controls">
+        <div class="controls">
             <button @click="debug = !debug">
                 {{ debug ? "debug mode: on" : "debug mode: off" }}
             </button>
-        </div> -->
+        </div>
 
         <b v-if="status && !debug">{{ status }}</b>
 

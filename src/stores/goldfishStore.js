@@ -32,7 +32,7 @@ export const useGoldfishStore = defineStore("goldfish", {
                         seed === null
                             ? null
                             : Number(
-                                  (BigInt(seed) * 69069n + 1n) & 0xffffffffn
+                                  (BigInt(seed) * 69069n + 1n) & 0xffffffffn,
                               );
                 case "wsr":
                     return (seed) =>
@@ -40,7 +40,7 @@ export const useGoldfishStore = defineStore("goldfish", {
                             ? null
                             : Number(
                                   (BigInt(seed) * 0x41c64e6dn + 0x3039n) &
-                                      0xffffffffn
+                                      0xffffffffn,
                               );
             }
         },
@@ -52,7 +52,7 @@ export const useGoldfishStore = defineStore("goldfish", {
                 case "og_1.1":
                     return {
                         reset: 41,
-                        hole_load: 17,
+                        hole_load: 16,
                     };
                 case "wsr":
                     return {
@@ -121,7 +121,7 @@ export const useGoldfishStore = defineStore("goldfish", {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(json),
-                }
+                },
             );
 
             if (res.ok) {
@@ -140,7 +140,7 @@ export const useGoldfishStore = defineStore("goldfish", {
 
                     this.advance(
                         this.advanceCounts.hole_load * holeLoadCount +
-                            this.advanceCounts.reset
+                            this.advanceCounts.reset,
                     );
 
                     // convert response to wind tracker history
@@ -166,10 +166,10 @@ export const useGoldfishStore = defineStore("goldfish", {
             for (let i = 0; i < settingsStore.holes; i++) {
                 this.goldfishHistory.push([
                     windStore.wind.directions.find(
-                        (dir) => dir.goldfishId === winds[i].direction
+                        (dir) => dir.goldfishId === winds[i].direction,
                     ),
                     windStore.wind.speeds.find(
-                        (spd) => spd.m_s === winds[i].speed
+                        (spd) => spd.m_s === winds[i].speed,
                     ),
                     {},
                 ]);

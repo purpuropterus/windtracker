@@ -75,13 +75,13 @@ function setToTarget() {
     min-width: 0;
 }
 
-.input label {
+label {
     font-size: 1rem;
     min-height: 1.25rem;
 }
 
-.input input,
-.input select {
+input,
+select {
     width: 12rem;
     padding: 0.45rem 0.6rem;
     border: 1px solid #c7d0d9;

@@ -32,15 +32,49 @@
                 </div>
                 <div class="arrow" :style="{ left: arrowX + 'px' }">
                     <span class="arrow-label">{{
-                        Math.floor(simulationCurrentFrame)
+                        Math.floor(effectiveFrame)
                     }}</span>
                 </div>
             </div>
         </div>
         <div class="controls">
-            <button>pause in-game</button>
-            <button @click="nextShot">next shot</button>
-            <button>end hole</button>
+            <div class="input">
+                <label></label>
+                <button
+                    @click="handlePauseInGame"
+                    :class="{
+                        unpausing:
+                            unpauseEndTime !== null &&
+                            unpauseEndTime.value !== null,
+                    }"
+                    :disabled="
+                        unpauseEndTime !== null && unpauseEndTime.value !== null
+                    "
+                >
+                    {{ pauseInGameButtonLabel }}
+                </button>
+            </div>
+            <div class="input">
+                <label></label>
+                <button @click="handleRandomAim">random aim</button>
+            </div>
+            <div class="input">
+                <label></label>
+                <button @click="handleEndHole">end hole</button>
+            </div>
+            <div class="input">
+                <label for="end-hole-offset">end hole offset (seconds)</label>
+                <input
+                    type="number"
+                    v-model="endHoleOffsetSeconds"
+                    step="any"
+                    title="end hole offset (seconds)"
+                />
+            </div>
+            <div class="input">
+                <label></label>
+                <button @click="applyEndHoleOffset">apply</button>
+            </div>
         </div>
     </div>
 </template>
@@ -49,6 +83,7 @@
 import { getRandomAimInRadians } from "@/game/aim";
 import { getRandomBlinkTime } from "@/game/blink.js";
 import { choosePin } from "@/game/pin";
+import { shouldExtraRngAdvanceOccurWhenGeneratingWind } from "@/game/wind";
 import { useGoldfishStore } from "@/stores/goldfishStore";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { computed, onMounted, onUnmounted, ref, toRef, watch } from "vue";
@@ -81,6 +116,67 @@ const handleReset = () => {
     simulationCurrentFrame.value = 0;
 };
 
+const endHoleOffsetSeconds = ref(0);
+const endHoleOffsetFrames = ref(0);
+
+const applyEndHoleOffset = () => {
+    endHoleOffsetFrames.value = endHoleOffsetSeconds.value * FRAME_RATE;
+};
+
+const UNPAUSE_DELAY_FRAMES = 34;
+const unpauseEndTime = ref(null);
+
+const handlePauseInGame = () => {
+    if (unpauseEndTime.value !== null) return;
+    if (paused.value) {
+        unpauseEndTime.value =
+            performance.now() + (UNPAUSE_DELAY_FRAMES / FRAME_RATE) * 1000;
+    } else {
+        paused.value = true;
+    }
+};
+
+const pauseInGameButtonLabel = computed(() => {
+    if (unpauseEndTime.value !== null) return "unpausing...";
+    return paused.value ? "unpause in-game" : "pause in-game";
+});
+
+const handleEndHole = () => {
+    const frame = effectiveFrame.value;
+    const idx = events.value.findIndex(
+        (e) => frame >= e.start && frame < e.start + e.length,
+    );
+    if (idx === -1) return;
+
+    const current = events.value[idx];
+
+    events.value = [];
+
+    let startSeed = current.seed;
+
+    const advanceCount = goldfishStore.advanceCounts["hole_load"];
+    for (let i = 0; i < advanceCount; i++) {
+        startSeed = goldfishStore.advanceFunction(parseInt(startSeed));
+    }
+
+    const dummyEvent = {
+        start: 0,
+        length: BLINK_DURATION,
+        seed: startSeed,
+    };
+
+    events.value.push(dummyEvent);
+
+    // goldfishStore.lastKnownSeed = startSeed;
+
+    updateEvents();
+    handleReset();
+};
+
+const effectiveFrame = computed(
+    () => simulationCurrentFrame.value + endHoleOffsetFrames.value,
+);
+
 const zoomIn = () => {
     pxPerFrame.value = Math.min(50, pxPerFrame.value * 1.5);
 };
@@ -89,7 +185,7 @@ const zoomOut = () => {
     pxPerFrame.value = Math.max(1, pxPerFrame.value / 1.5);
 };
 
-const nextShot = () => {
+const handleRandomAim = () => {
     const frame = simulationCurrentFrame.value;
     const idx = events.value.findIndex(
         (e) => frame >= e.start && frame < e.start + e.length,
@@ -120,9 +216,7 @@ const eventsTooShort = () => {
     if (!lastEvent) return true;
     else {
         const lastEventEndTimeFromNowInSeconds =
-            (lastEvent.start +
-                lastEvent.length -
-                simulationCurrentFrame.value) /
+            (lastEvent.start + lastEvent.length - effectiveFrame.value) /
             FRAME_RATE;
         if (lastEventEndTimeFromNowInSeconds < MIN_EVENTS_LENGTH_IN_SECONDS)
             return true;
@@ -137,9 +231,21 @@ const updateEvents = () => {
         // its length will be the length of time it takes for the first blink to occur
 
         if (events.value.length === 0) {
-            const advanceCount = goldfishStore.advanceCounts["reset"];
             let startSeed = simulationCurrentSeed.value;
 
+            // depending on the seed, rng can advance 1 more time before hole 1
+            if (
+                shouldExtraRngAdvanceOccurWhenGeneratingWind(
+                    startSeed,
+                    goldfishStore.advanceFunction,
+                    ver_1_0.value,
+                )
+            ) {
+                startSeed = goldfishStore.advanceFunction(parseInt(startSeed));
+            }
+
+            // -1 because the advance counts assume the extra one occurred
+            const advanceCount = goldfishStore.advanceCounts["reset"] - 1;
             for (let i = 0; i < advanceCount; i++) {
                 startSeed = goldfishStore.advanceFunction(parseInt(startSeed));
             }
@@ -186,8 +292,10 @@ const eventsWithData = computed(() => {
         return {
             ...ev,
             data: {
-                pin: choosePin(pinSeed) + 1,
-                randomAim: getRandomAimInRadians(ev.seed) / RADIANS_TO_RONANS,
+                pin: choosePin(pinSeed, ver_1_0.value) + 1,
+                randomAim:
+                    getRandomAimInRadians(ev.seed, ver_1_0.value) /
+                    RADIANS_TO_RONANS,
             },
         };
     });
@@ -196,6 +304,7 @@ const eventsWithData = computed(() => {
 onMounted(() => updateEvents());
 watch(currentGame, async (newGame, oldGame) => updateEvents());
 watch(simulationCurrentFrame, async (newFrame, oldFrame) => updateEvents());
+watch(endHoleOffsetFrames, async (newOffset, oldOffset) => updateEvents());
 watch(simulationCurrentSeed, async (newSeed, oldSeed) => updateEvents());
 
 // style and animations
@@ -203,7 +312,7 @@ watch(simulationCurrentSeed, async (newSeed, oldSeed) => updateEvents());
 const arrowX = 120;
 
 const trackStyle = computed(() => ({
-    transform: `translateX(${arrowX - simulationCurrentFrame.value * pxPerFrame.value}px)`,
+    transform: `translateX(${arrowX - effectiveFrame.value * pxPerFrame.value}px)`,
 }));
 
 const barColors = ["#2d6a4f", "#1b4332"];
@@ -226,6 +335,14 @@ function tick(timestamp) {
 
     if (!paused.value) {
         simulationCurrentFrame.value += dt * FRAME_RATE;
+    }
+
+    if (
+        unpauseEndTime.value !== null &&
+        performance.now() >= unpauseEndTime.value
+    ) {
+        unpauseEndTime.value = null;
+        paused.value = false;
     }
 
     rafId = requestAnimationFrame(tick);
@@ -252,17 +369,6 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     gap: 1rem;
-}
-
-.controls button {
-    padding: 0.55rem 1.1rem;
-    border: none;
-    border-radius: 0.375rem;
-    background: #222;
-    color: #fff;
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
 }
 
 .visualization {
@@ -338,5 +444,49 @@ onUnmounted(() => {
     padding: 0.1rem 0.3rem;
     color: #e74c3c;
     font-variant-numeric: tabular-nums;
+}
+
+.input {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+label {
+    font-size: 1rem;
+    min-height: 1.25rem;
+}
+
+input,
+select {
+    width: 12rem;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #c7d0d9;
+    border-radius: 0.375rem;
+    background: #fff;
+    color: #2c3e50;
+    font: inherit;
+}
+
+button {
+    align-self: flex-start;
+    padding: 0.55rem 1.1rem;
+    border: none;
+    border-radius: 0.375rem;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button.unpausing {
+    background: #aaa;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 </style>
